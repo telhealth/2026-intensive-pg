@@ -514,6 +514,8 @@ function calcEarnedPts(mine){
 
   return{dailyPts,kanbuPts,dailyDays:dailyDays.size,kanbuWeeks:kanbuWeeks.size};
 }
+
+window.selMission=function(btn){
   document.querySelectorAll('.mission-btn').forEach(b=>b.classList.remove('sel-daily','sel-kanbu'));
   curMission=btn.dataset.m;
   if(curMission==='daily')btn.classList.add('sel-daily');
