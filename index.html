@@ -23,24 +23,24 @@
 .admin-link{margin-top:16px;font-size:12px;color:var(–muted);cursor:pointer;text-decoration:underline;}
 
 #app{display:none;flex-direction:column;min-height:100vh;}
-.header{background:var(–surface);border-bottom:1px solid var(–border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-.header-logo{font-size:20px;font-weight:900;color:var(–accent);}
-.header-sub{font-size:11px;color:var(–muted);}
+.header{background:linear-gradient(135deg,#1a9e6e,#0d7a52);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(26,158,110,0.3);}
+.header-logo{font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px;}
+.header-sub{font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px;}
 .header-right{display:flex;align-items:center;gap:10px;}
-.user-badge{background:var(–surface2);border:1px solid var(–border);border-radius:20px;padding:6px 14px;font-size:13px;}
-.btn-logout{background:none;border:1px solid var(–border);color:var(–muted);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s;}
-.btn-logout:hover{border-color:var(–accent);color:var(–accent);}
+.user-badge{background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:20px;padding:6px 14px;font-size:13px;color:white;}
+.btn-logout{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:white;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-logout:hover{background:rgba(255,255,255,0.25);}
 
-.progress-banner{background:var(–surface);border-bottom:1px solid var(–border);padding:16px 20px;}
-.progress-info{display:flex;justify-content:space-between;margin-bottom:10px;}
-.progress-label{font-size:13px;font-weight:700;}
-.progress-days{font-size:12px;color:var(–muted);}
-.progress-bar-bg{background:var(–surface2);border-radius:99px;height:8px;overflow:hidden;}
-.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(–accent),var(–accent2));border-radius:99px;transition:width 1s ease;}
+.progress-banner{background:#0d7a52;padding:12px 20px;position:sticky;top:66px;z-index:98;}
+.progress-info{display:flex;justify-content:space-between;margin-bottom:8px;}
+.progress-label{font-size:13px;font-weight:700;color:white;}
+.progress-days{font-size:12px;color:rgba(255,255,255,0.75);}
+.progress-bar-bg{background:rgba(255,255,255,0.25);border-radius:99px;height:6px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,#a8f0d0,white);border-radius:99px;transition:width 1s ease;}
 
-.tabs{display:flex;background:var(–surface);border-bottom:1px solid var(–border);overflow-x:auto;}
-.tab{padding:14px 18px;font-size:13px;font-weight:500;cursor:pointer;color:var(–muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit;}
-.tab.active{color:var(–accent);border-bottom-color:var(–accent);}
+.tabs{display:flex;background:#0d7a52;overflow-x:auto;position:sticky;top:116px;z-index:97;border-top:1px solid rgba(255,255,255,0.15);}
+.tab{padding:12px 18px;font-size:13px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.65);white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit;}
+.tab.active{color:white;border-bottom-color:white;font-weight:700;}
 
 .main{flex:1;padding:20px;max-width:680px;margin:0 auto;width:100%;}
 
@@ -206,7 +206,7 @@
 
 <div id="app">
   <div class="header">
-    <div><div class="header-logo">💪 8주 챌린지</div><div class="header-sub">다이어트 운동 인증 프로그램</div></div>
+    <div><div class="header-logo">올바른 다이어트 (Intensive)</div><div class="header-sub">건강하게 다이어트해요 🌿</div></div>
     <div class="header-right">
       <div class="user-badge" id="user-badge"></div>
       <button class="btn-logout" onclick="logout()">로그아웃</button>
