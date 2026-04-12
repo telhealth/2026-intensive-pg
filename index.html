@@ -61,9 +61,9 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .write-box{background:#fff;border:1px solid var(–border);border-radius:var(–radius);padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(26,158,110,0.06);}
 .write-box h3{font-size:14px;font-weight:700;margin-bottom:14px;color:var(–accent2);}
 .mission-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
-.mission-btn{background:var(–surface2);border:1.5px solid var(–border);color:var(–muted);border-radius:8px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s;font-weight:500;}
-.mission-btn.sel-daily{background:var(–orange);border-color:var(–orange);color:#fff;font-weight:700;}
-.mission-btn.sel-kanbu{background:var(–purple);border-color:var(–purple);color:#fff;font-weight:700;}
+.mission-btn{background:var(–surface2);border:2px solid var(–border);color:var(–text);border-radius:10px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s;font-weight:500;}
+.mission-btn.sel-daily{background:#fff3e8;border-color:var(–orange);color:#b85c10;font-weight:700;}
+.mission-btn.sel-kanbu{background:#f3eeff;border-color:var(–purple);color:#5b21b6;font-weight:700;}
 .point-hint{font-size:11px;color:var(–muted);margin-bottom:14px;padding:8px 12px;background:var(–surface2);border-radius:8px;line-height:1.6;white-space:pre-line;}
 #photo-preview{width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px;display:none;}
 .write-box textarea{width:100%;background:var(–surface2);border:1.5px solid var(–border);border-radius:10px;padding:12px;font-size:14px;color:var(–text);font-family:inherit;resize:none;outline:none;margin-bottom:12px;transition:border-color .2s;min-height:80px;}
@@ -168,8 +168,9 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .my-box h4{font-size:13px;font-weight:700;color:var(–accent2);margin-bottom:12px;}
 .week-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;}
 .week-cell{aspect-ratio:1;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(–muted);background:var(–surface2);border:1px solid var(–border);flex-direction:column;gap:1px;}
-.week-cell.c-daily{background:#e8832a33;border-color:var(–orange);color:#c4691e;}
+.week-cell.c-daily{background:#fff3e8;border-color:var(–orange);color:#b85c10;}
 .week-cell.c-kanbu{background:#7c3aed33;border-color:var(–purple);color:#6d28d9;}
+.week-cell.c-kanbu-heart{background:#f3eeff;border-color:var(–purple);color:#5b21b6;}
 .week-cell.today{box-shadow:0 0 0 2px var(–accent);}
 .week-legend{display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(–muted);}
 .leg-dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:3px;}
@@ -261,8 +262,8 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
   <div class="write-box">
     <h3>✍️ 오늘의 인증</h3>
     <div class="mission-row">
-      <button class="mission-btn sel-daily" data-m="daily" onclick="selMission(this)">📋 데일리 미션 +2점</button>
-      <button class="mission-btn" data-m="kanbu" onclick="selMission(this)">🤝 깐부 미션 +2점</button>
+      <button class="mission-btn sel-daily" data-m="daily" onclick="selMission(this)">📋 데일리 미션</button>
+      <button class="mission-btn" data-m="kanbu" onclick="selMission(this)">🤝 깐부 미션</button>
       <button class="mission-btn" data-m="cheer" onclick="selMission(this)">📣 응원 한마디</button>
     </div>
     <div class="point-hint" id="point-hint">📋 데일리 미션 · 인증 1회당 2점 · 총 33회 (최대 66점)</div>
@@ -484,7 +485,35 @@ window.switchTab=function(name,el){
   if(name==='mypage')renderMypage();
 };
 
-window.selMission=function(btn){
+// ── 점수 계산 헬퍼 ──
+function getPostDate(p){
+  if(!p.time)return null;
+  return new Date(p.time.toMillis?p.time.toMillis():p.time);
+}
+function getWeekNum(date){
+  // 챌린지 시작일 기준 주차 계산 (1주차=1)
+  return Math.ceil((Math.floor((date-CHALLENGE_START)/86400000)+1)/7);
+}
+function calcEarnedPts(mine){
+  // 데일리: 날짜별 최초 1회만
+  const dailyDays=new Set();
+  mine.filter(p=>p.m==='daily').forEach(p=>{
+    const d=getPostDate(p);if(!d)return;
+    dailyDays.add(d.toDateString());
+  });
+  const dailyPts=dailyDays.size*PTS;
+
+  // 깐부: 2주차부터, 주차별 최초 1회만
+  const kanbuWeeks=new Set();
+  mine.filter(p=>p.m==='kanbu').forEach(p=>{
+    const d=getPostDate(p);if(!d)return;
+    const wk=getWeekNum(d);
+    if(wk>=2)kanbuWeeks.add(wk);
+  });
+  const kanbuPts=kanbuWeeks.size*PTS;
+
+  return{dailyPts,kanbuPts,dailyDays:dailyDays.size,kanbuWeeks:kanbuWeeks.size};
+}
   document.querySelectorAll('.mission-btn').forEach(b=>b.classList.remove('sel-daily','sel-kanbu'));
   curMission=btn.dataset.m;
   if(curMission==='daily')btn.classList.add('sel-daily');
@@ -652,11 +681,11 @@ function renderRanking(){
   document.getElementById('week-react-podium').innerHTML=makePodium(weekReact,'cnt',x=>x.cnt+'개 공감');
 
   // 누적 랭킹
-  const sorted=names.map(n=>({
-    name:n,
-    pts:allPosts.filter(p=>p.author===n).reduce((s,p)=>s+(p.pts||0),0),
-    cnt:allPosts.filter(p=>p.author===n&&p.m!=='cheer').length
-  })).sort((a,b)=>b.cnt-a.cnt);
+  const sorted=names.map(n=>{
+    const mine=allPosts.filter(p=>p.author===n);
+    const {dailyPts,kanbuPts,dailyDays,kanbuWeeks}=calcEarnedPts(mine);
+    return{name:n,pts:dailyPts+kanbuPts,cnt:mine.filter(p=>p.m!=='cheer').length};
+  }).sort((a,b)=>b.cnt-a.cnt);
 
   const c=document.getElementById('rank-list');
   if(!sorted.length){c.innerHTML='<div class="empty-state"><div class="emoji">🏆</div><p>아직 기록이 없어요!</p></div>';return;}
@@ -683,7 +712,8 @@ function renderMypage(){
   const dCnt=mine.filter(p=>p.m==='daily').length;
   const kCnt=mine.filter(p=>p.m==='kanbu').length;
   const cCnt=mine.filter(p=>p.m==='cheer').length;
-  const totalPts=mine.reduce((s,p)=>s+(p.pts||0),0);
+  const {dailyPts,kanbuPts,dailyDays,kanbuWeeks}=calcEarnedPts(mine);
+  const totalPts=dailyPts+kanbuPts;
   const pct=Math.round(totalPts/MAX_PTS*100);
 
   const av=document.getElementById('my-avatar-big');
@@ -694,12 +724,12 @@ function renderMypage(){
   document.getElementById('hp-score').textContent=totalPts;
   document.getElementById('hp-pct').textContent=pct+'%';
   document.getElementById('hp-bar').style.width=pct+'%';
-  document.getElementById('hp-d-pts').textContent=dCnt*PTS+'점';
-  document.getElementById('hp-d-cnt').textContent=dCnt+' / '+DAILY_MAX+'회';
-  document.getElementById('hp-d-pct').textContent=Math.round(dCnt/DAILY_MAX*100)+'% 달성';
-  document.getElementById('hp-k-pts').textContent=kCnt*PTS+'점';
-  document.getElementById('hp-k-cnt').textContent=kCnt+' / '+KANBU_MAX+'회';
-  document.getElementById('hp-k-pct').textContent=Math.round(kCnt/KANBU_MAX*100)+'% 달성';
+  document.getElementById('hp-d-pts').textContent=dailyPts+'점';
+  document.getElementById('hp-d-cnt').textContent=dailyDays+' / '+DAILY_MAX+'일';
+  document.getElementById('hp-d-pct').textContent=Math.round(dailyDays/DAILY_MAX*100)+'% 달성';
+  document.getElementById('hp-k-pts').textContent=kanbuPts+'점';
+  document.getElementById('hp-k-cnt').textContent=kanbuWeeks+' / '+KANBU_MAX+'주';
+  document.getElementById('hp-k-pct').textContent=Math.round(kanbuWeeks/KANBU_MAX*100)+'% 달성';
   document.getElementById('my-total').textContent=mine.length;
   document.getElementById('my-daily').textContent=dCnt;
   document.getElementById('my-kanbu').textContent=kCnt;
@@ -707,22 +737,36 @@ function renderMypage(){
   const today=new Date(),todayStr=today.toDateString();
   let h='',cal='';
   for(let w=1;w<=8;w++) h+=`<div class="week-cell" style="background:transparent;border-color:transparent;color:var(--muted);font-size:8px">${w}주</div>`;
+
+  // 날짜별 데일리/깐부 포스트 맵 만들기
+  const dailyByDate={}, kanbuByDate={};
+  mine.forEach(p=>{
+    const d=getPostDate(p);if(!d)return;
+    const ds=d.toDateString();
+    if(p.m==='daily'){if(!dailyByDate[ds])dailyByDate[ds]=[];dailyByDate[ds].push(p);}
+    if(p.m==='kanbu'){if(!kanbuByDate[ds])kanbuByDate[ds]=[];kanbuByDate[ds].push(p);}
+  });
+
   for(let w=0;w<8;w++){
     for(let d=0;d<7;d++){
       const dt=new Date(CHALLENGE_START);dt.setDate(dt.getDate()+w*7+d);
       const ds=dt.toDateString(),isToday=ds===todayStr,isFut=dt>today&&!isToday;
       if(isFut){cal+=`<div class="week-cell" style="opacity:.2">${dt.getDate()}</div>`;continue;}
-      const dp=mine.find(p=>p.time&&new Date(p.time.toMillis?p.time.toMillis():p.time).toDateString()===ds);
-      const cls=dp?(dp.m==='kanbu'?'c-kanbu':'c-daily'):'';
-      cal+=`<div class="week-cell ${cls} ${isToday?'today':''}"><span>${dt.getDate()}</span>${dp?'✓':''}</div>`;
+      const hasDaily=!!dailyByDate[ds];
+      const hasKanbu=!!kanbuByDate[ds];
+      let cls='', inner=`<span>${dt.getDate()}</span>`;
+      if(hasDaily){cls='c-daily';}
+      if(hasKanbu){cls='c-kanbu-heart';inner+=`<span style="font-size:10px">💜</span>`;}
+      else if(hasDaily){inner+=`<span style="font-size:8px;opacity:.7">✓</span>`;}
+      cal+=`<div class="week-cell ${cls} ${isToday?'today':''}">${inner}</div>`;
     }
   }
   document.getElementById('my-cal').innerHTML=h+cal;
 
   const tot=mine.length||1;
   document.getElementById('my-bars').innerHTML=`
-    <div class="my-type-bar"><div class="tbar-label"><span>📋 데일리 미션</span><span>${dCnt}/${DAILY_MAX}회 · ${dCnt*PTS}점</span></div><div class="bar-bg"><div class="bar-fill bar-d" style="width:${Math.round(dCnt/DAILY_MAX*100)}%"></div></div></div>
-    <div class="my-type-bar"><div class="tbar-label"><span>🤝 깐부 미션</span><span>${kCnt}/${KANBU_MAX}회 · ${kCnt*PTS}점</span></div><div class="bar-bg"><div class="bar-fill bar-k" style="width:${Math.round(kCnt/KANBU_MAX*100)}%"></div></div></div>
+    <div class="my-type-bar"><div class="tbar-label"><span>📋 데일리 미션</span><span>${dCnt}회 올림 · 점수인정 ${dailyDays}일 · ${dailyPts}점</span></div><div class="bar-bg"><div class="bar-fill bar-d" style="width:${Math.round(dailyDays/DAILY_MAX*100)}%"></div></div></div>
+    <div class="my-type-bar"><div class="tbar-label"><span>🤝 깐부 미션</span><span>${kCnt}회 올림 · 점수인정 ${kanbuWeeks}주 · ${kanbuPts}점</span></div><div class="bar-bg"><div class="bar-fill bar-k" style="width:${Math.round(kanbuWeeks/KANBU_MAX*100)}%"></div></div></div>
     <div class="my-type-bar"><div class="tbar-label"><span>📣 응원</span><span>${cCnt}회</span></div><div class="bar-bg"><div class="bar-fill bar-c" style="width:${Math.round(cCnt/tot*100)}%"></div></div></div>`;
 }
 
