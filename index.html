@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💪 8주 다이어트 챌린지</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0f0f13;--surface:#1a1a24;--surface2:#22222f;--accent:#ff6b35;--accent2:#ffd166;--green:#06d6a0;--purple:#8338ec;--text:#f0f0f5;--muted:#888899;--border:rgba(255,255,255,0.08);--radius:16px;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+#login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 30% 50%,#ff6b3522 0%,transparent 60%),radial-gradient(ellipse at 70% 20%,#ffd16611 0%,transparent 50%),var(–bg);}
+.login-box{background:var(–surface);border:1px solid var(–border);border-radius:24px;padding:48px 40px;width:360px;text-align:center;animation:fadeUp .5s ease;}
+.login-emoji{font-size:56px;margin-bottom:12px;}
+.login-box h1{font-size:22px;font-weight:700;margin-bottom:6px;}
+.login-box p{font-size:13px;color:var(–muted);margin-bottom:32px;}
+.login-box input{width:100%;background:var(–surface2);border:1px solid var(–border);border-radius:12px;padding:14px 16px;font-size:15px;color:var(–text);font-family:inherit;margin-bottom:12px;outline:none;transition:border-color .2s;}
+.login-box input:focus{border-color:var(–accent);}
+.btn-primary{width:100%;background:var(–accent);color:white;border:none;border-radius:12px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px);}
+.admin-link{margin-top:16px;font-size:12px;color:var(–muted);cursor:pointer;text-decoration:underline;}
+
+#app{display:none;flex-direction:column;min-height:100vh;}
+.header{background:var(–surface);border-bottom:1px solid var(–border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.header-logo{font-size:20px;font-weight:900;color:var(–accent);}
+.header-sub{font-size:11px;color:var(–muted);}
+.header-right{display:flex;align-items:center;gap:10px;}
+.user-badge{background:var(–surface2);border:1px solid var(–border);border-radius:20px;padding:6px 14px;font-size:13px;}
+.btn-logout{background:none;border:1px solid var(–border);color:var(–muted);border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-logout:hover{border-color:var(–accent);color:var(–accent);}
+
+.progress-banner{background:var(–surface);border-bottom:1px solid var(–border);padding:16px 20px;}
+.progress-info{display:flex;justify-content:space-between;margin-bottom:10px;}
+.progress-label{font-size:13px;font-weight:700;}
+.progress-days{font-size:12px;color:var(–muted);}
+.progress-bar-bg{background:var(–surface2);border-radius:99px;height:8px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(–accent),var(–accent2));border-radius:99px;transition:width 1s ease;}
+
+.tabs{display:flex;background:var(–surface);border-bottom:1px solid var(–border);overflow-x:auto;}
+.tab{padding:14px 18px;font-size:13px;font-weight:500;cursor:pointer;color:var(–muted);white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit;}
+.tab.active{color:var(–accent);border-bottom-color:var(–accent);}
+
+.main{flex:1;padding:20px;max-width:680px;margin:0 auto;width:100%;}
+
+.write-box{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:20px;margin-bottom:20px;}
+.write-box h3{font-size:14px;font-weight:700;margin-bottom:14px;color:var(–accent2);}
+.mission-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.mission-btn{background:var(–surface2);border:1px solid var(–border);color:var(–muted);border-radius:8px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.mission-btn.sel-daily{background:var(–accent);border-color:var(–accent);color:white;font-weight:700;}
+.mission-btn.sel-kanbu{background:var(–purple);border-color:var(–purple);color:white;font-weight:700;}
+.point-hint{font-size:11px;color:var(–muted);margin-bottom:14px;padding:8px 12px;background:var(–surface2);border-radius:8px;}
+#photo-preview{width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px;display:none;}
+.write-box textarea{width:100%;background:var(–surface2);border:1px solid var(–border);border-radius:10px;padding:12px;font-size:14px;color:var(–text);font-family:inherit;resize:none;outline:none;margin-bottom:12px;transition:border-color .2s;min-height:80px;}
+.write-box textarea:focus{border-color:var(–accent);}
+.write-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.photo-label{display:flex;align-items:center;gap:6px;background:var(–surface2);border:1px solid var(–border);border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer;color:var(–muted);transition:all .2s;}
+.photo-label:hover{border-color:var(–accent);color:var(–accent);}
+.photo-selected{font-size:12px;color:var(–green);flex:1;}
+.btn-post{background:var(–accent);color:white;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-post:hover{opacity:.9;transform:translateY(-1px);}
+
+.feed{display:flex;flex-direction:column;gap:16px;}
+.post-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:18px;animation:fadeUp .3s ease;transition:border-color .2s;}
+.post-card:hover{border-color:rgba(255,107,53,0.3);}
+.post-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.post-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;}
+.post-meta{flex:1;}
+.post-name{font-size:14px;font-weight:700;}
+.post-time{font-size:11px;color:var(–muted);margin-top:1px;}
+.post-type-badge{font-size:11px;border-radius:6px;padding:4px 8px;font-weight:700;}
+.badge-daily{background:#ffd16622;color:var(–accent2);}
+.badge-kanbu{background:#8338ec22;color:var(–purple);}
+.badge-cheer{background:#ff6b3522;color:var(–accent);}
+.post-text{font-size:14px;line-height:1.6;margin-bottom:12px;}
+.post-img{width:100%;max-height:280px;object-fit:cover;border-radius:10px;margin-bottom:12px;}
+.post-footer{display:flex;align-items:center;gap:12px;padding-top:10px;border-top:1px solid var(–border);}
+.react-btn{background:none;border:none;cursor:pointer;font-size:13px;color:var(–muted);display:flex;align-items:center;gap:5px;transition:color .2s;font-family:inherit;padding:4px 6px;border-radius:6px;}
+.react-btn:hover{color:var(–accent);background:rgba(255,107,53,0.08);}
+.react-btn.liked{color:var(–accent);}
+.post-pts{margin-left:auto;font-size:12px;font-weight:700;color:var(–green);}
+
+.comments{margin-top:10px;}
+.comment-input-row{display:flex;gap:8px;margin-bottom:8px;}
+.comment-input{flex:1;background:var(–surface2);border:1px solid var(–border);border-radius:8px;padding:8px 12px;font-size:13px;color:var(–text);font-family:inherit;outline:none;transition:border-color .2s;}
+.comment-input:focus{border-color:var(–accent);}
+.btn-comment{background:var(–accent);color:white;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.comment-item{display:flex;gap:8px;margin-bottom:6px;font-size:13px;}
+.comment-name{font-weight:700;color:var(–accent2);flex-shrink:0;}
+.comment-text{color:var(–text);line-height:1.5;}
+
+.rank-list{display:flex;flex-direction:column;gap:10px;}
+.rank-item{background:var(–surface);border:1px solid var(–border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;animation:fadeUp .3s ease;}
+.rank-num{font-size:18px;font-weight:900;width:30px;text-align:center;color:var(–muted);}
+.rank-num.gold{color:#ffd166;}.rank-num.silver{color:#b0b0c0;}.rank-num.bronze{color:#cd7f32;}
+.rank-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;}
+.rank-name{flex:1;font-weight:700;font-size:14px;}
+.rank-pts{font-size:15px;font-weight:900;color:var(–green);white-space:nowrap;}
+.rank-bar-wrap{width:80px;background:var(–surface2);border-radius:99px;height:6px;}
+.rank-bar{height:100%;border-radius:99px;background:linear-gradient(90deg,var(–green),var(–accent2));}
+
+/* 마이페이지 */
+.my-profile-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:24px;margin-bottom:16px;display:flex;align-items:center;gap:20px;}
+.my-avatar-big{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;flex-shrink:0;}
+.my-info h2{font-size:20px;font-weight:900;margin-bottom:4px;}
+.my-info p{font-size:13px;color:var(–muted);}
+
+.hp-card{background:linear-gradient(135deg,#0d1f12,#0f1a1f);border:1px solid rgba(6,214,160,0.25);border-radius:var(–radius);padding:24px;margin-bottom:16px;position:relative;overflow:hidden;}
+.hp-card::before{content:’’;position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:radial-gradient(circle,rgba(6,214,160,0.12),transparent 70%);border-radius:50%;}
+.hp-label{font-size:11px;color:var(–green);font-weight:700;letter-spacing:2px;margin-bottom:10px;}
+.hp-score-row{display:flex;align-items:baseline;gap:8px;margin-bottom:14px;}
+.hp-score{font-size:52px;font-weight:900;color:var(–green);line-height:1;}
+.hp-max{font-size:18px;color:var(–muted);}
+.hp-pct{font-size:13px;color:var(–green);margin-left:4px;opacity:.7;}
+.hp-bar-bg{background:rgba(255,255,255,0.07);border-radius:99px;height:10px;overflow:hidden;margin-bottom:18px;}
+.hp-bar-fill{height:100%;background:linear-gradient(90deg,var(–green),var(–accent2));border-radius:99px;transition:width 1.2s ease;}
+.hp-breakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.hp-item{background:rgba(255,255,255,0.04);border-radius:10px;padding:14px;}
+.hp-item-label{font-size:11px;color:var(–muted);margin-bottom:6px;}
+.hp-item-val{font-size:22px;font-weight:900;}
+.hp-item-val.c-daily{color:var(–accent2);}
+.hp-item-val.c-kanbu{color:var(–purple);}
+.hp-item-sub{font-size:11px;color:var(–muted);margin-top:3px;}
+.hp-item-prog{font-size:11px;margin-top:4px;}
+
+.my-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.my-stat{background:var(–surface);border:1px solid var(–border);border-radius:12px;padding:14px 12px;text-align:center;}
+.my-stat .num{font-size:22px;font-weight:900;}
+.my-stat .num.c1{color:var(–accent);}
+.my-stat .num.c2{color:var(–accent2);}
+.my-stat .num.c3{color:var(–purple);}
+.my-stat .label{font-size:11px;color:var(–muted);margin-top:4px;}
+
+.my-box{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:20px;margin-bottom:16px;}
+.my-box h4{font-size:13px;font-weight:700;color:var(–accent2);margin-bottom:14px;}
+.week-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;}
+.week-cell{aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(–muted);background:var(–surface2);border:1px solid var(–border);flex-direction:column;gap:1px;}
+.week-cell.c-daily{background:rgba(255,209,102,0.2);border-color:var(–accent2);color:var(–accent2);}
+.week-cell.c-kanbu{background:rgba(131,56,236,0.25);border-color:var(–purple);color:var(–purple);}
+.week-cell.today{box-shadow:0 0 0 2px white;}
+.week-legend{display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(–muted);}
+.leg-dot{width:10px;height:10px;border-radius:3px;display:inline-block;}
+
+.my-type-bar{margin-bottom:14px;}
+.tbar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px;}
+.tbar-label span:first-child{color:var(–muted);}
+.tbar-label span:last-child{font-weight:700;}
+.bar-bg{background:var(–surface2);border-radius:99px;height:8px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:99px;}
+.bar-d{background:linear-gradient(90deg,#ffd166,#ffbe0b);}
+.bar-k{background:linear-gradient(90deg,#8338ec,#3a86ff);}
+.bar-c{background:var(–accent);}
+
+.admin-panel{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:24px;}
+.admin-panel h3{font-size:16px;font-weight:700;margin-bottom:6px;}
+.admin-panel>p{font-size:13px;color:var(–muted);margin-bottom:20px;}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.stat-card{background:var(–surface2);border-radius:12px;padding:16px;text-align:center;}
+.stat-card .num{font-size:28px;font-weight:900;color:var(–accent);}
+.stat-card .label{font-size:12px;color:var(–muted);margin-top:4px;}
+.btn-excel{background:var(–green);color:#0f0f13;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-right:10px;}
+.btn-excel:hover{opacity:.9;}
+.btn-clear{background:none;border:1px solid #ff4444;color:#ff4444;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.btn-clear:hover{background:#ff444422;}
+.admin-table{width:100%;border-collapse:collapse;margin-top:20px;font-size:13px;}
+.admin-table th{background:var(–surface2);padding:10px 12px;text-align:left;color:var(–muted);font-weight:500;border-bottom:1px solid var(–border);}
+.admin-table td{padding:10px 12px;border-bottom:1px solid var(–border);vertical-align:middle;}
+.admin-table tr:last-child td{border-bottom:none;}
+
+.empty-state{text-align:center;padding:60px 20px;color:var(–muted);}
+.empty-state .emoji{font-size:48px;margin-bottom:12px;}
+.empty-state p{font-size:14px;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(–surface);border:1px solid var(–border);border-radius:12px;padding:12px 20px;font-size:14px;font-weight:500;z-index:999;transition:transform .3s ease;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none!important;}
+</style>
+
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-emoji">💪</div>
+    <h1>8주 다이어트 챌린지</h1>
+    <p>이름을 입력하고 시작하세요!</p>
+    <input type="text" id="name-input" placeholder="이름 입력" maxlength="10" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn-primary" onclick="login()">참가하기</button>
+    <div class="admin-link" onclick="adminLogin()">관리자로 입장</div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="header">
+    <div><div class="header-logo">💪 8주 챌린지</div><div class="header-sub">다이어트 운동 인증 프로그램</div></div>
+    <div class="header-right">
+      <div class="user-badge" id="user-badge"></div>
+      <button class="btn-logout" onclick="logout()">로그아웃</button>
+    </div>
+  </div>
+
+  <div class="progress-banner">
+    <div class="progress-info">
+      <span class="progress-label" id="prog-label"></span>
+      <span class="progress-days" id="prog-days"></span>
+    </div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-fill"></div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('feed',this)">🏠 피드</button>
+    <button class="tab" onclick="switchTab('ranking',this)">🏆 랭킹</button>
+    <button class="tab" onclick="switchTab('mypage',this)">👤 마이페이지</button>
+    <button class="tab hidden" id="admin-tab" onclick="switchTab('admin',this)">⚙️ 관리자</button>
+  </div>
+
+  <div class="main">
+
+```
+<div id="tab-feed">
+  <div class="write-box">
+    <h3>✍️ 오늘의 인증</h3>
+    <div class="mission-row">
+      <button class="mission-btn sel-daily" data-m="daily" onclick="selMission(this)">📋 데일리 미션 +2점</button>
+      <button class="mission-btn" data-m="kanbu" onclick="selMission(this)">🤝 깐부 미션 +2점</button>
+      <button class="mission-btn" data-m="cheer" onclick="selMission(this)">📣 응원 한마디</button>
+    </div>
+    <div class="point-hint" id="point-hint">📋 데일리 미션 · 인증 1회당 2점 · 총 33회 (최대 66점)</div>
+    <img id="photo-preview" src="" alt="">
+    <textarea id="post-text" placeholder="오늘의 인증을 남겨보세요! 💪" rows="3"></textarea>
+    <div class="write-actions">
+      <label class="photo-label" for="photo-input">📷 사진 추가
+        <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhoto(this)">
+      </label>
+      <span class="photo-selected" id="photo-status"></span>
+      <button class="btn-post" onclick="submitPost()">올리기 🚀</button>
+    </div>
+  </div>
+  <div class="feed" id="feed-list"></div>
+</div>
+
+<div id="tab-ranking" class="hidden">
+  <div class="rank-list" id="rank-list"></div>
+</div>
+
+<div id="tab-mypage" class="hidden">
+  <div class="my-profile-card">
+    <div class="my-avatar-big" id="my-avatar-big"></div>
+    <div class="my-info"><h2 id="my-name-big"></h2><p id="my-join-info"></p></div>
+  </div>
+
+  <div class="hp-card">
+    <div class="hp-label">🌿 HEALTHY POINT</div>
+    <div class="hp-score-row">
+      <div class="hp-score" id="hp-score">0</div>
+      <div class="hp-max">/ 80점</div>
+      <div class="hp-pct" id="hp-pct"></div>
+    </div>
+    <div class="hp-bar-bg"><div class="hp-bar-fill" id="hp-bar" style="width:0%"></div></div>
+    <div class="hp-breakdown">
+      <div class="hp-item">
+        <div class="hp-item-label">📋 데일리 미션</div>
+        <div class="hp-item-val c-daily" id="hp-d-pts">0점</div>
+        <div class="hp-item-sub" id="hp-d-cnt">0 / 33회</div>
+        <div class="hp-item-prog" id="hp-d-pct" style="color:var(--accent2)"></div>
+      </div>
+      <div class="hp-item">
+        <div class="hp-item-label">🤝 깐부 미션</div>
+        <div class="hp-item-val c-kanbu" id="hp-k-pts">0점</div>
+        <div class="hp-item-sub" id="hp-k-cnt">0 / 7회</div>
+        <div class="hp-item-prog" id="hp-k-pct" style="color:var(--purple)"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-stats-grid">
+    <div class="my-stat"><div class="num c1" id="my-total">0</div><div class="label">전체 인증</div></div>
+    <div class="my-stat"><div class="num c2" id="my-daily">0</div><div class="label">데일리</div></div>
+    <div class="my-stat"><div class="num c3" id="my-kanbu">0</div><div class="label">깐부</div></div>
+  </div>
+
+  <div class="my-box">
+    <h4>📅 8주 인증 캘린더</h4>
+    <div class="week-grid" id="my-cal"></div>
+    <div class="week-legend">
+      <span><span class="leg-dot" style="background:#ffd16633;border:1px solid var(--accent2)"></span> 데일리</span>
+      <span><span class="leg-dot" style="background:#8338ec33;border:1px solid var(--purple)"></span> 깐부</span>
+    </div>
+  </div>
+
+  <div class="my-box">
+    <h4>📊 미션 달성 현황</h4>
+    <div id="my-bars"></div>
+  </div>
+</div>
+
+<div id="tab-admin" class="hidden">
+  <div class="admin-panel">
+    <h3>⚙️ 관리자 페이지</h3>
+    <p>전체 인증 현황 확인 및 엑셀 다운로드</p>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="num" id="stat-total">0</div><div class="label">전체 인증</div></div>
+      <div class="stat-card"><div class="num" id="stat-members">0</div><div class="label">참가자 수</div></div>
+      <div class="stat-card"><div class="num" id="stat-today">0</div><div class="label">오늘 인증</div></div>
+    </div>
+    <button class="btn-excel" onclick="dlExcel()">📥 엑셀 다운로드</button>
+    <button class="btn-clear" onclick="clearAll()">🗑️ 전체 삭제</button>
+    <table class="admin-table">
+      <thead><tr><th>#</th><th>이름</th><th>미션</th><th>내용</th><th>사진</th><th>일시</th><th>포인트</th><th>🔥</th></tr></thead>
+      <tbody id="admin-tbody"></tbody>
+    </table>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const CHALLENGE_START = new Date('2026-04-08');
+const TOTAL_DAYS = 56;
+const DAILY_MAX = 33, KANBU_MAX = 7, PTS = 2;
+const MAX_PTS = (DAILY_MAX + KANBU_MAX) * PTS; // 80
+const COLORS = ['#ff6b35','#ffd166','#06d6a0','#118ab2','#ef476f','#8338ec','#3a86ff','#fb5607','#ffbe0b','#80b918'];
+const MI = {
+  daily:{emoji:'📋',text:'데일리 미션',cls:'badge-daily',pts:PTS,hint:`📋 데일리 미션 · 1회당 ${PTS}점 · 총 ${DAILY_MAX}회 (최대 ${DAILY_MAX*PTS}점)`},
+  kanbu:{emoji:'🤝',text:'깐부 미션',cls:'badge-kanbu',pts:PTS,hint:`🤝 깐부 미션 · 파트너와 함께 인증 · 1회당 ${PTS}점 · 총 ${KANBU_MAX}회 (최대 ${KANBU_MAX*PTS}점)`},
+  cheer:{emoji:'📣',text:'응원',cls:'badge-cheer',pts:0,hint:'📣 응원 한마디 · 동료를 응원해요! (포인트 없음)'}
+};
+
+let user=null, isAdmin=false, curMission='daily', curPhoto=null;
+
+const gc=n=>{let h=0;for(let c of n)h+=c.charCodeAt(0);return COLORS[h%COLORS.length];};
+const gp=()=>JSON.parse(localStorage.getItem('cp2')||'[]');
+const sp=d=>localStorage.setItem('cp2',JSON.stringify(d));
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function login(){
+  const n=document.getElementById('name-input').value.trim();
+  if(!n){toast('이름을 입력해주세요!');return;}
+  user=n;isAdmin=false;go();
+}
+function adminLogin(){
+  const pw=prompt('관리자 비밀번호:');
+  if(pw==='1234'){user='관리자';isAdmin=true;go();}
+  else if(pw!==null)toast('비밀번호가 틀렸어요!');
+}
+function go(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app').style.display='flex';
+  document.getElementById('user-badge').textContent=user;
+  if(isAdmin)document.getElementById('admin-tab').classList.remove('hidden');
+  updateProg();renderFeed();
+}
+function logout(){
+  user=null;isAdmin=false;curPhoto=null;
+  document.getElementById('login-screen').style.display='';
+  document.getElementById('app').style.display='none';
+  document.getElementById('name-input').value='';
+  document.getElementById('admin-tab').classList.add('hidden');
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===0));
+  ['feed','ranking','mypage','admin'].forEach((t,i)=>document.getElementById('tab-'+t).classList.toggle('hidden',i!==0));
+}
+function updateProg(){
+  const diff=Math.floor((Date.now()-CHALLENGE_START)/86400000)+1;
+  const day=Math.min(Math.max(diff,1),TOTAL_DAYS);
+  const pct=Math.round(day/TOTAL_DAYS*100);
+  document.getElementById('prog-label').textContent=Math.ceil(day/7)+'주차 진행 중';
+  document.getElementById('prog-days').textContent=day+' / '+TOTAL_DAYS+'일';
+  document.getElementById('prog-fill').style.width=pct+'%';
+}
+function switchTab(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  ['feed','ranking','mypage','admin'].forEach(t=>document.getElementById('tab-'+t).classList.toggle('hidden',t!==name));
+  if(name==='ranking')renderRanking();
+  if(name==='admin')renderAdmin();
+  if(name==='mypage')renderMypage();
+}
+function selMission(btn){
+  document.querySelectorAll('.mission-btn').forEach(b=>b.classList.remove('sel-daily','sel-kanbu'));
+  curMission=btn.dataset.m;
+  if(curMission==='daily')btn.classList.add('sel-daily');
+  else if(curMission==='kanbu')btn.classList.add('sel-kanbu');
+  document.getElementById('point-hint').textContent=MI[curMission].hint;
+}
+function handlePhoto(input){
+  const f=input.files[0];if(!f)return;
+  if(f.size>5*1024*1024){toast('사진은 5MB 이하로 올려주세요!');return;}
+  const r=new FileReader();
+  r.onload=e=>{curPhoto=e.target.result;const pv=document.getElementById('photo-preview');pv.src=curPhoto;pv.style.display='block';document.getElementById('photo-status').textContent='✓ '+f.name;};
+  r.readAsDataURL(f);
+}
+function submitPost(){
+  const text=document.getElementById('post-text').value.trim();
+  if(!text&&!curPhoto){toast('내용이나 사진을 추가해주세요!');return;}
+  const posts=gp();
+  const mine=posts.filter(p=>p.author===user);
+  if(curMission==='daily'&&mine.filter(p=>p.m==='daily').length>=DAILY_MAX){toast(`데일리 미션은 최대 ${DAILY_MAX}회!`);return;}
+  if(curMission==='kanbu'&&mine.filter(p=>p.m==='kanbu').length>=KANBU_MAX){toast(`깐부 미션은 최대 ${KANBU_MAX}회!`);return;}
+  posts.unshift({id:Date.now(),author:user,m:curMission,text,photo:curPhoto,time:new Date().toISOString(),likes:[],comments:[],pts:MI[curMission].pts});
+  sp(posts);
+  document.getElementById('post-text').value='';
+  const pv=document.getElementById('photo-preview');pv.style.display='none';pv.src='';
+  document.getElementById('photo-status').textContent='';
+  document.getElementById('photo-input').value='';
+  curPhoto=null;
+  renderFeed();
+  toast(MI[curMission].pts>0?`인증 완료! +${MI[curMission].pts}점 💪`:'응원 완료! 📣');
+}
+function timeAgo(iso){
+  const m=Math.floor((Date.now()-new Date(iso))/60000);
+  if(m<1)return'방금 전';if(m<60)return m+'분 전';
+  const h=Math.floor(m/60);if(h<24)return h+'시간 전';
+  return Math.floor(h/24)+'일 전';
+}
+function renderFeed(){
+  const posts=gp(),c=document.getElementById('feed-list');
+  if(!posts.length){c.innerHTML='<div class="empty-state"><div class="emoji">🏃</div><p>아직 인증이 없어요. 첫 번째로 올려보세요!</p></div>';return;}
+  c.innerHTML=posts.map(p=>{
+    const mi=MI[p.m]||MI.cheer,color=gc(p.author),liked=p.likes.includes(user);
+    const cmts=(p.comments||[]).map(c=>`<div class="comment-item"><span class="comment-name">${esc(c.author)}</span><span class="comment-text"> ${esc(c.text)}</span></div>`).join('');
+    return `<div class="post-card" id="post-${p.id}">
+      <div class="post-header">
+        <div class="post-avatar" style="background:${color}22;color:${color}">${p.author[0]}</div>
+        <div class="post-meta"><div class="post-name">${esc(p.author)}</div><div class="post-time">${timeAgo(p.time)}</div></div>
+        <span class="post-type-badge ${mi.cls}">${mi.emoji} ${mi.text}</span>
+      </div>
+      ${p.photo?`<img class="post-img" src="${p.photo}" alt="인증사진">`:''}
+      ${p.text?`<div class="post-text">${esc(p.text)}</div>`:''}
+      <div class="post-footer">
+        <button class="react-btn ${liked?'liked':''}" onclick="toggleLike(${p.id})">${liked?'🔥':'🤍'} ${p.likes.length}</button>
+        <button class="react-btn" onclick="toggleCmt(${p.id})">💬 ${(p.comments||[]).length}</button>
+        ${p.pts>0?`<span class="post-pts">+${p.pts}pt</span>`:''}
+      </div>
+      <div class="comments" id="cmt-${p.id}" style="display:none">
+        <div>${cmts}</div>
+        <div class="comment-input-row">
+          <input class="comment-input" placeholder="응원 댓글 달기..." id="ci-${p.id}" onkeydown="if(event.key==='Enter')addCmt(${p.id})">
+          <button class="btn-comment" onclick="addCmt(${p.id})">전송</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleLike(id){
+  const posts=gp(),p=posts.find(x=>x.id===id);if(!p)return;
+  const i=p.likes.indexOf(user);
+  if(i===-1){p.likes.push(user);toast('🔥 파이팅!');}else p.likes.splice(i,1);
+  sp(posts);renderFeed();
+}
+function toggleCmt(id){
+  const el=document.getElementById('cmt-'+id);
+  el.style.display=el.style.display==='none'?'block':'none';
+  if(el.style.display==='block'){const ci=document.getElementById('ci-'+id);if(ci)ci.focus();}
+}
+function addCmt(id){
+  const input=document.getElementById('ci-'+id),text=input.value.trim();if(!text)return;
+  const posts=gp(),p=posts.find(x=>x.id===id);if(!p)return;
+  if(!p.comments)p.comments=[];
+  p.comments.push({author:user,text,time:new Date().toISOString()});
+  sp(posts);renderFeed();
+  setTimeout(()=>{const el=document.getElementById('cmt-'+id);if(el)el.style.display='block';},0);
+}
+function renderRanking(){
+  const posts=gp();
+  const names=[...new Set(posts.map(p=>p.author))];
+  const sorted=names.map(n=>({n,pts:posts.filter(p=>p.author===n).reduce((s,p)=>s+(p.pts||0),0)})).sort((a,b)=>b.pts-a.pts);
+  const c=document.getElementById('rank-list');
+  if(!sorted.length){c.innerHTML='<div class="empty-state"><div class="emoji">🏆</div><p>아직 인증 기록이 없어요!</p></div>';return;}
+  c.innerHTML=sorted.map(({n,pts},i)=>{
+    const color=gc(n),nc=i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1;
+    return `<div class="rank-item">
+      <div class="rank-num ${nc}">${medal}</div>
+      <div class="rank-avatar" style="background:${color}22;color:${color}">${n[0]}</div>
+      <div class="rank-name">${esc(n)}</div>
+      <div class="rank-pts">${pts}pt</div>
+      <div class="rank-bar-wrap"><div class="rank-bar" style="width:${Math.round(pts/MAX_PTS*100)}%"></div></div>
+    </div>`;
+  }).join('');
+}
+function renderMypage(){
+  const posts=gp();
+  const mine=posts.filter(p=>p.author===user);
+  const color=gc(user);
+  const dCnt=mine.filter(p=>p.m==='daily').length;
+  const kCnt=mine.filter(p=>p.m==='kanbu').length;
+  const cCnt=mine.filter(p=>p.m==='cheer').length;
+  const totalPts=mine.reduce((s,p)=>s+(p.pts||0),0);
+  const pct=Math.round(totalPts/MAX_PTS*100);
+
+  // 프로필
+  const av=document.getElementById('my-avatar-big');
+  av.textContent=user[0];av.style.background=color+'22';av.style.color=color;
+  document.getElementById('my-name-big').textContent=user;
+  document.getElementById('my-join-info').textContent=`헬시포인트 ${totalPts}점 · 인증 ${mine.length}회`;
+
+  // 헬시포인트
+  document.getElementById('hp-score').textContent=totalPts;
+  document.getElementById('hp-pct').textContent=pct+'%';
+  document.getElementById('hp-bar').style.width=pct+'%';
+  document.getElementById('hp-d-pts').textContent=dCnt*PTS+'점';
+  document.getElementById('hp-d-cnt').textContent=dCnt+' / '+DAILY_MAX+'회';
+  document.getElementById('hp-d-pct').textContent=Math.round(dCnt/DAILY_MAX*100)+'% 달성';
+  document.getElementById('hp-k-pts').textContent=kCnt*PTS+'점';
+  document.getElementById('hp-k-cnt').textContent=kCnt+' / '+KANBU_MAX+'회';
+  document.getElementById('hp-k-pct').textContent=Math.round(kCnt/KANBU_MAX*100)+'% 달성';
+
+  // 통계
+  document.getElementById('my-total').textContent=mine.length;
+  document.getElementById('my-daily').textContent=dCnt;
+  document.getElementById('my-kanbu').textContent=kCnt;
+
+  // 캘린더
+  const today=new Date(),todayStr=today.toDateString();
+  let h='',cal='';
+  for(let w=1;w<=8;w++) h+=`<div class="week-cell" style="background:transparent;border-color:transparent;color:var(--muted);font-size:9px">${w}주</div>`;
+  for(let w=0;w<8;w++){
+    for(let d=0;d<7;d++){
+      const dt=new Date(CHALLENGE_START);dt.setDate(dt.getDate()+w*7+d);
+      const ds=dt.toDateString(),isToday=ds===todayStr,isFut=dt>today&&!isToday;
+      if(isFut){cal+=`<div class="week-cell" style="opacity:.2">${dt.getDate()}</div>`;continue;}
+      const dp=mine.find(p=>new Date(p.time).toDateString()===ds);
+      const cls=dp?(dp.m==='kanbu'?'c-kanbu':'c-daily'):'';
+      cal+=`<div class="week-cell ${cls} ${isToday?'today':''}"><span>${dt.getDate()}</span>${dp?'✓':''}</div>`;
+    }
+  }
+  document.getElementById('my-cal').innerHTML=h+cal;
+
+  // 바
+  const tot=mine.length||1;
+  document.getElementById('my-bars').innerHTML=`
+    <div class="my-type-bar">
+      <div class="tbar-label"><span>📋 데일리 미션</span><span>${dCnt}/${DAILY_MAX}회 · ${dCnt*PTS}점</span></div>
+      <div class="bar-bg"><div class="bar-fill bar-d" style="width:${Math.round(dCnt/DAILY_MAX*100)}%"></div></div>
+    </div>
+    <div class="my-type-bar">
+      <div class="tbar-label"><span>🤝 깐부 미션</span><span>${kCnt}/${KANBU_MAX}회 · ${kCnt*PTS}점</span></div>
+      <div class="bar-bg"><div class="bar-fill bar-k" style="width:${Math.round(kCnt/KANBU_MAX*100)}%"></div></div>
+    </div>
+    <div class="my-type-bar">
+      <div class="tbar-label"><span>📣 응원</span><span>${cCnt}회</span></div>
+      <div class="bar-bg"><div class="bar-fill bar-c" style="width:${Math.round(cCnt/tot*100)}%"></div></div>
+    </div>`;
+}
+function renderAdmin(){
+  const posts=gp();
+  const members=new Set(posts.map(p=>p.author)).size;
+  const today=new Date().toDateString();
+  document.getElementById('stat-total').textContent=posts.length;
+  document.getElementById('stat-members').textContent=members;
+  document.getElementById('stat-today').textContent=posts.filter(p=>new Date(p.time).toDateString()===today).length;
+  const tbody=document.getElementById('admin-tbody');
+  if(!posts.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:24px">인증 기록이 없습니다</td></tr>';return;}
+  tbody.innerHTML=posts.map((p,i)=>{
+    const mi=MI[p.m]||MI.cheer,dt=new Date(p.time);
+    const ds=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+    return `<tr><td>${i+1}</td><td>${esc(p.author)}</td><td><span class="post-type-badge ${mi.cls}">${mi.text}</span></td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.text||'-')}</td>
+      <td>${p.photo?'✅':'-'}</td><td>${ds}</td>
+      <td style="color:var(--green);font-weight:700">${p.pts||0}pt</td>
+      <td>🔥${p.likes.length}</td></tr>`;
+  }).join('');
+}
+function dlExcel(){
+  const posts=gp();
+  let csv='\uFEFF순번,이름,미션유형,내용,사진,일시,포인트,좋아요,댓글\n';
+  posts.forEach((p,i)=>{
+    const mi=MI[p.m]||MI.cheer,dt=new Date(p.time);
+    const ds=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+    csv+=`${i+1},"${p.author}","${mi.text}","${(p.text||'').replace(/"/g,'""')}","${p.photo?'있음':'없음'}","${ds}",${p.pts||0},${p.likes.length},${(p.comments||[]).length}\n`;
+  });
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`챌린지_${new Date().toISOString().slice(0,10)}.csv`;a.click();
+  toast('📥 다운로드 완료!');
+}
+function clearAll(){
+  if(!confirm('정말 전체 데이터를 삭제할까요?'))return;
+  localStorage.removeItem('cp2');renderFeed();renderAdmin();toast('🗑️ 삭제 완료');
+}
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+</script>
+
+</body>
+</html>
