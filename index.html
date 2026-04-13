@@ -165,15 +165,18 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .my-stat .num.c3{color:var(–purple);}
 .my-stat .label{font-size:11px;color:var(–muted);margin-top:3px;}
 .my-box{background:#fff;border:1px solid var(–border);border-radius:var(–radius);padding:18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(26,158,110,0.06);}
-.my-box h4{font-size:13px;font-weight:700;color:var(–accent2);margin-bottom:12px;}
-.week-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;}
-.week-cell{aspect-ratio:1;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(–muted);background:var(–surface2);border:1px solid var(–border);flex-direction:column;gap:1px;}
-.week-cell.c-daily{background:#fff3e8;border-color:var(–orange);color:#b85c10;}
-.week-cell.c-kanbu{background:#7c3aed33;border-color:var(–purple);color:#6d28d9;}
-.week-cell.c-kanbu-heart{background:#f3eeff;border-color:var(–purple);color:#5b21b6;}
-.week-cell.today{box-shadow:0 0 0 2px var(–accent);}
-.week-legend{display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(–muted);}
-.leg-dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:3px;}
+.my-box h4{font-size:13px;font-weight:700;color:var(–accent2);margin-bottom:4px;}
+.my-box .cal-desc{font-size:11px;color:var(–muted);margin-bottom:12px;line-height:1.5;}
+.cal-table{width:100%;border-collapse:collapse;table-layout:fixed;}
+.cal-table th{font-size:10px;font-weight:700;color:var(–muted);text-align:center;padding:4px 2px;background:var(–surface2);}
+.cal-table td{text-align:center;padding:2px;}
+.cal-week-label{font-size:10px;font-weight:700;color:var(–accent2);background:var(–surface2);border-radius:4px;padding:2px 3px;white-space:nowrap;}
+.cal-cell{aspect-ratio:1;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:9px;font-weight:600;color:var(–muted);background:var(–surface2);border:1px solid var(–border);gap:1px;width:100%;min-height:30px;position:relative;}
+.cal-cell.c-daily{background:#fff3e8;border-color:var(–orange);color:#b85c10;}
+.cal-cell.c-kanbu-heart{background:#f3eeff;border-color:var(–purple);color:#5b21b6;}
+.cal-cell.today{box-shadow:0 0 0 2px var(–accent);}
+.cal-cell.future{opacity:.25;}
+.cal-heart{font-size:11px;line-height:1;}
 .my-type-bar{margin-bottom:12px;}
 .tbar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;}
 .tbar-label span:first-child{color:var(–muted);}
@@ -214,8 +217,9 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
   <div class="login-box">
     <div class="login-emoji">🌿</div>
     <h1>올바른 다이어트 Intensive</h1>
-    <p>건강하게 다이어트해요 💪</p>
-    <input type="text" id="name-input" placeholder="이름 입력" maxlength="10" onkeydown="if(event.key==='Enter')login()">
+    <p>이름과 사번을 입력해주세요 💪</p>
+    <input type="text" id="name-input" placeholder="이름 입력" maxlength="10" onkeydown="if(event.key==='Enter')document.getElementById('empno-input').focus()">
+    <input type="text" id="empno-input" placeholder="사번 입력" maxlength="20" onkeydown="if(event.key==='Enter')login()">
     <button class="btn-primary" onclick="login()">참가하기</button>
     <div class="admin-link" onclick="adminLogin()">관리자로 입장</div>
   </div>
@@ -335,10 +339,11 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
   </div>
   <div class="my-box">
     <h4>📅 8주 인증 캘린더</h4>
-    <div class="week-grid" id="my-cal"></div>
-    <div class="week-legend">
-      <span><span class="leg-dot" style="background:#e8832a33;border:1px solid var(--orange)"></span>데일리</span>
-      <span><span class="leg-dot" style="background:#7c3aed33;border:1px solid var(--purple)"></span>깐부</span>
+    <p class="cal-desc">데일리 미션을 수행해서 캘린더에 색을 채워요 🌿</p>
+    <div id="my-cal"></div>
+    <div style="display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--muted);">
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#fff3e8;border:1px solid var(--orange);margin-right:3px"></span>데일리</span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#f3eeff;border:1px solid var(--purple);margin-right:3px"></span>깐부 💜</span>
     </div>
   </div>
   <div class="my-box">
@@ -398,7 +403,7 @@ const COLORS = ['#d46a2e','#c4922a','#1a9e6e','#2a6e9d','#9d2a6e','#7c3aed','#3a
 const EMOJIS = ['👍🏻','🫶🏻','💪🏻','🩷','😢'];
 const MI = {
   daily:{emoji:'📋',text:'데일리 미션',cls:'badge-daily',pts:PTS,
-    hint:'📋 데일리 미션 · 인증 1회당 2점 · 총 33회 (최대 66점)'},
+    hint:'주차별 주제에 맞는 인증사진을 올려주세요. 📸\n(일 1회 인증 필수)'},
   kanbu:{emoji:'🤝',text:'깐부 미션',cls:'badge-kanbu',pts:PTS,
     hint:'🤝 깐부 미션 🩷 : 각각 개별로 올려야 깐부 미션 인증으로 내 점수가 인정됩니다.\n1회당 2점 · 총 7회 (최대 14점)'},
   cheer:{emoji:'📣',text:'응원',cls:'badge-cheer',pts:0,
@@ -424,9 +429,22 @@ function compressImage(file){
   });
 }
 
+// ── 참가자 명단 (이름: 사번) ──
+const MEMBERS = {
+  '김미정': '11111',
+  '홍길동': '22222',
+  '이영희': '33333',
+  '박철수': '44444',
+  '테스트': '00000',
+};
+
 window.login=function(){
   const n=document.getElementById('name-input').value.trim();
+  const e=document.getElementById('empno-input').value.trim();
   if(!n){toast('이름을 입력해주세요!');return;}
+  if(!e){toast('사번을 입력해주세요!');return;}
+  if(!MEMBERS[n]){toast('등록되지 않은 이름이에요!');return;}
+  if(MEMBERS[n]!==e){toast('사번이 일치하지 않아요!');return;}
   user=n;isAdmin=false;go();
 };
 window.adminLogin=function(){
@@ -447,6 +465,7 @@ window.logout=function(){
   document.getElementById('login-screen').style.display='';
   document.getElementById('app').style.display='none';
   document.getElementById('name-input').value='';
+  document.getElementById('empno-input').value='';
   document.getElementById('admin-tab').classList.add('hidden');
   document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===0));
   ['feed','cert','ranking','mypage','admin'].forEach((t,i)=>document.getElementById('tab-'+t).classList.toggle('hidden',i!==0));
@@ -736,11 +755,8 @@ function renderMypage(){
   document.getElementById('my-daily').textContent=dCnt;
   document.getElementById('my-kanbu').textContent=kCnt;
 
+  // 날짜별 포스트 맵
   const today=new Date(),todayStr=today.toDateString();
-  let h='',cal='';
-  for(let w=1;w<=8;w++) h+=`<div class="week-cell" style="background:transparent;border-color:transparent;color:var(--muted);font-size:8px">${w}주</div>`;
-
-  // 날짜별 데일리/깐부 포스트 맵 만들기
   const dailyByDate={}, kanbuByDate={};
   mine.forEach(p=>{
     const d=getPostDate(p);if(!d)return;
@@ -749,21 +765,38 @@ function renderMypage(){
     if(p.m==='kanbu'){if(!kanbuByDate[ds])kanbuByDate[ds]=[];kanbuByDate[ds].push(p);}
   });
 
+  // 테이블 형태 캘린더 (행=주차, 열=요일)
+  const DAYS=['월','화','수','목','금','토','일'];
+  let html=`<table class="cal-table"><thead><tr><th></th>${DAYS.map(d=>`<th>${d}</th>`).join('')}</tr></thead><tbody>`;
+
   for(let w=0;w<8;w++){
+    html+=`<tr><td><span class="cal-week-label">${w+1}주</span></td>`;
     for(let d=0;d<7;d++){
       const dt=new Date(CHALLENGE_START);dt.setDate(dt.getDate()+w*7+d);
       const ds=dt.toDateString(),isToday=ds===todayStr,isFut=dt>today&&!isToday;
-      if(isFut){cal+=`<div class="week-cell" style="opacity:.2">${dt.getDate()}</div>`;continue;}
+
+      // 날짜 표시: 월이 바뀌는 첫날만 M/D, 나머지는 D
+      const isFirstOfMonth=dt.getDate()===1;
+      const label=isFirstOfMonth?`${dt.getMonth()+1}/${dt.getDate()}`:dt.getDate();
+
+      if(isFut){
+        html+=`<td><div class="cal-cell future">${label}</div></td>`;
+        continue;
+      }
+
       const hasDaily=!!dailyByDate[ds];
       const hasKanbu=!!kanbuByDate[ds];
-      let cls='', inner=`<span>${dt.getDate()}</span>`;
-      if(hasDaily){cls='c-daily';}
-      if(hasKanbu){cls='c-kanbu-heart';inner+=`<span style="font-size:10px">💜</span>`;}
-      else if(hasDaily){inner+=`<span style="font-size:8px;opacity:.7">✓</span>`;}
-      cal+=`<div class="week-cell ${cls} ${isToday?'today':''}">${inner}</div>`;
+      let cls='';
+      if(hasKanbu) cls='c-kanbu-heart';
+      else if(hasDaily) cls='c-daily';
+
+      const heart=hasKanbu?`<span class="cal-heart">💜</span>`:'';
+      html+=`<td><div class="cal-cell ${cls} ${isToday?'today':''}">${label}${heart}</div></td>`;
     }
+    html+=`</tr>`;
   }
-  document.getElementById('my-cal').innerHTML=h+cal;
+  html+=`</tbody></table>`;
+  document.getElementById('my-cal').innerHTML=html;
 
   const tot=mine.length||1;
   document.getElementById('my-bars').innerHTML=`
