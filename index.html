@@ -497,7 +497,7 @@ const MI = {
   daily:{emoji:'📋',text:'데일리 미션',cls:'badge-daily',pts:PTS,
     hint:'주차별 주제에 맞는 인증사진을 올려주세요. 📸\n(일 1회 인증 필수 · 1회당 2점 · 최대 66점)'},
   kanbu:{emoji:'🤝',text:'깐부 미션',cls:'badge-kanbu',pts:PTS,
-    hint:'🤝 깐부 미션 🩷 : 각각 개별로 올려야 깐부 미션 인증으로 내 점수가 인정됩니다.\n1회당 2점 · 주 1회 · 총 8주 (최대 16점)'},
+    hint:'🤝 깐부 미션 🩷 : 개별로 올려야 깐부 미션에서 내 점수가 인정됩니다.\n1회당 2점 · 주 1회 · 총 8주 (최대 16점)'},
   mundam:{emoji:'💬',text:'다이어트 문답',cls:'badge-mundam',pts:MUNDAM_PTS,
     hint:''},  // hint는 동적으로 설정
   cheer:{emoji:'📣',text:'응원',cls:'badge-cheer',pts:0,
@@ -712,7 +712,7 @@ window.selMission=function(btn){
   else if(m==='mundam') btn.classList.add('sel-mundam');
   if(m==='mundam'){
     const wk=getCurrentWeek();
-    MI.mundam.hint='💬 다이어트 문답 · 1회당 1점 · 주 1회 (최대 8점)\n\n📝 이번 주 주제:\n'+MUNDAM_TOPICS[wk-1];
+    MI.mundam.hint='💬 다이어트 문답 (사진 불요) · 1회당 1점 · 주 1회 (최대 8점)\n\n📝 이번 주 주제:\n'+MUNDAM_TOPICS[wk-1];
   }
   document.getElementById('point-hint').textContent=MI[m]?.hint||'';
 };
