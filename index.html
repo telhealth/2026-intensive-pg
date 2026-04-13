@@ -96,7 +96,8 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .pts-select{flex:1;background:#fff;border:1px solid var(–border);border-radius:8px;padding:9px 10px;font-size:13px;color:var(–text);font-family:inherit;outline:none;}
 .pts-input{width:80px;background:#fff;border:1px solid var(–border);border-radius:8px;padding:9px 10px;font-size:13px;color:var(–text);font-family:inherit;outline:none;}
 .pts-memo{width:100%;background:#fff;border:1px solid var(–border);border-radius:8px;padding:9px 10px;font-size:13px;color:var(–text);font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;}
-.btn-grant{background:linear-gradient(135deg,var(–purple),#a855f7);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;}
+.btn-grant{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;margin-bottom:6px;}
+.btn-grant:hover{opacity:.9;}
 .pts-history-box{background:var(–surface2);border-radius:12px;padding:16px;margin-bottom:8px;}
 .pts-history-box h4{font-size:13px;font-weight:700;color:var(–accent2);margin-bottom:10px;}
 .pts-history-item{background:#fff;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;}
@@ -263,7 +264,16 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .stat-card{background:var(–surface2);border-radius:12px;padding:14px;text-align:center;}
 .stat-card .num{font-size:26px;font-weight:900;color:var(–accent);}
 .stat-card .label{font-size:11px;color:var(–muted);margin-top:3px;}
-.btn-excel{background:var(–green);color:#fff;border:none;border-radius:10px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.btn-excel{background:#1a9e6e;color:#fff;border:none;border-radius:10px;padding:11px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.btn-excel:hover{opacity:.9;}
+
+/* 공지 팝업 */
+.notice-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:99999;align-items:flex-start;justify-content:center;padding:80px 20px 20px;}
+.notice-modal.show{display:flex;}
+.notice-modal-box{background:#fff;border-radius:20px;padding:28px 24px;max-width:380px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,0.2);}
+.notice-modal-title{font-size:17px;font-weight:900;color:var(–accent2);margin-bottom:10px;}
+.notice-modal-content{font-size:14px;color:var(–text);line-height:1.8;margin-bottom:20px;white-space:pre-line;}
+.notice-close{width:100%;background:#1a9e6e;color:#fff;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
 .admin-table{width:100%;border-collapse:collapse;margin-top:18px;font-size:12px;display:block;overflow-x:auto;}
 .admin-table th{background:var(–surface2);padding:9px 10px;text-align:left;color:var(–muted);font-weight:500;border-bottom:1px solid var(–border);white-space:nowrap;}
 .admin-table td{padding:9px 10px;border-bottom:1px solid var(–border);white-space:nowrap;}
@@ -441,16 +451,41 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
       <div class="stat-card"><div class="num" id="stat-today">0</div><div class="label">오늘 인증</div></div>
     </div>
 
+    <!-- 공지 팝업 관리 -->
+    <div class="pts-grant-box" style="margin-bottom:16px;">
+      <h4>📢 로그인 공지 팝업 관리</h4>
+      <input type="text" id="notice-title" class="pts-memo" placeholder="제목 입력" style="margin-bottom:8px;">
+      <textarea id="notice-content" class="pts-memo" rows="3" placeholder="내용 입력" style="min-height:70px;resize:none;"></textarea>
+      <div class="pts-grant-row" style="margin-bottom:10px;">
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">게시 시작일</div>
+          <input type="date" id="notice-start" class="pts-select" style="width:100%">
+        </div>
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">게시 종료일</div>
+          <input type="date" id="notice-end" class="pts-select" style="width:100%">
+        </div>
+      </div>
+      <button class="btn-grant" style="background:linear-gradient(135deg,#2e7d9e,#3a86ff);margin-bottom:6px;" onclick="saveNotice()">공지 등록 📢</button>
+      <button class="btn-grant" style="background:#aaa;" onclick="deleteNotice()">공지 삭제</button>
+    </div>
+
     <!-- 포인트 지급 -->
     <div class="pts-grant-box">
       <h4>🎁 포인트 지급</h4>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">대상자 (복수 선택 가능)</div>
+      <select id="grant-user" class="pts-select" multiple size="5" style="height:auto;margin-bottom:8px;">
+      </select>
       <div class="pts-grant-row">
-        <select id="grant-user" class="pts-select">
-          <option value="">참가자 선택</option>
-        </select>
-        <input type="number" id="grant-pts" class="pts-input" placeholder="점수" min="1" max="50">
+        <input type="number" id="grant-pts" class="pts-input" placeholder="점수" min="1" max="50" style="flex:1">
       </div>
-      <input type="text" id="grant-memo" class="pts-memo" placeholder="지급 사유 입력 (예: 리브레 사용 후기 작성 포인트 지급 완료)">
+      <select id="grant-memo-select" class="pts-select" style="margin-bottom:6px;" onchange="if(this.value)document.getElementById('grant-memo').value=this.value">
+        <option value="">지급 사유 선택 (또는 직접 입력)</option>
+        <option value="중간점검 보너스">중간점검 보너스</option>
+        <option value="최종점검 보너스">최종점검 보너스</option>
+        <option value="기사회생 최종점검 스페셜">기사회생 최종점검 스페셜</option>
+      </select>
+      <input type="text" id="grant-memo" class="pts-memo" placeholder="직접 입력 가능">
       <button class="btn-grant" onclick="grantPoints()">포인트 지급하기 🎁</button>
     </div>
 
@@ -483,7 +518,17 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
   <span class="lightbox-close">✕</span>
   <img id="lightbox-img" src="" alt="">
 </div>
+<!-- 공지 팝업 -->
+<div class="notice-modal" id="notice-modal">
+  <div class="notice-modal-box">
+    <div class="notice-modal-title" id="notice-modal-title"></div>
+    <div class="notice-modal-content" id="notice-modal-content"></div>
+    <button class="notice-close" onclick="document.getElementById('notice-modal').classList.remove('show')">확인</button>
+  </div>
+</div>
+
 <!-- 정보 팝업 -->
+
 <div class="info-modal" id="info-modal" onclick="if(event.target===this)closeInfo()">
   <div class="info-modal-box">
     <h3>🌿 2026 인텐시브 케어 프로그램</h3>
@@ -648,6 +693,8 @@ function go(){
   localStorage.setItem('diet_user', user);
   localStorage.setItem('diet_admin', isAdmin?'1':'0');
   updateProg();startListen();
+  // 공지 체크 (관리자는 제외)
+  if(!isAdmin) setTimeout(()=>checkNotice(), 1000);
 }
 window.logout=function(){
   if(unsubscribe)unsubscribe();
@@ -1190,21 +1237,76 @@ function startGrantListen(){
 }
 
 window.grantPoints=async function(){
-  const target=document.getElementById('grant-user').value;
+  const sel=document.getElementById('grant-user');
+  const targets=[...sel.selectedOptions].map(o=>o.value).filter(v=>v);
   const pts=parseInt(document.getElementById('grant-pts').value);
   const memo=document.getElementById('grant-memo').value.trim();
-  if(!target){toast('참가자를 선택해주세요!');return;}
+  if(!targets.length){toast('대상자를 선택해주세요!');return;}
   if(!pts||pts<1){toast('점수를 입력해주세요!');return;}
   if(!memo){toast('지급 사유를 입력해주세요!');return;}
   try{
-    await addDoc(collection(db,'grants'),{
-      target,pts,memo,by:user,time:serverTimestamp()
-    });
+    for(const target of targets){
+      await addDoc(collection(db,'grants'),{
+        target,pts,memo,by:user,time:serverTimestamp()
+      });
+    }
     document.getElementById('grant-pts').value='';
     document.getElementById('grant-memo').value='';
-    toast(`${target}님에게 ${pts}점 지급 완료! 🎁`);
+    document.getElementById('grant-memo-select').value='';
+    // 선택 해제
+    [...sel.options].forEach(o=>o.selected=false);
+    toast(`${targets.length}명에게 ${pts}점 지급 완료! 🎁`);
   }catch(e){toast('오류가 발생했어요!');console.error(e);}
 };
+
+// 공지 저장
+window.saveNotice=async function(){
+  const title=document.getElementById('notice-title').value.trim();
+  const content=document.getElementById('notice-content').value.trim();
+  const start=document.getElementById('notice-start').value;
+  const end=document.getElementById('notice-end').value;
+  if(!title||!content){toast('제목과 내용을 입력해주세요!');return;}
+  if(!start||!end){toast('게시 기간을 설정해주세요!');return;}
+  try{
+    await addDoc(collection(db,'notices'),{title,content,start,end,by:user,time:serverTimestamp()});
+    document.getElementById('notice-title').value='';
+    document.getElementById('notice-content').value='';
+    document.getElementById('notice-start').value='';
+    document.getElementById('notice-end').value='';
+    toast('공지 등록 완료! 📢');
+  }catch(e){toast('오류가 발생했어요!');console.error(e);}
+};
+
+// 공지 삭제 (가장 최근 공지 삭제)
+window.deleteNotice=async function(){
+  if(!confirm('현재 공지를 삭제할까요?'))return;
+  try{
+    const {getDocs,deleteDoc}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const q2=query(collection(db,'notices'),orderBy('time','desc'));
+    const snap=await getDocs(q2);
+    if(!snap.empty){
+      await deleteDoc(doc(db,'notices',snap.docs[0].id));
+      toast('공지 삭제 완료!');
+    }else toast('삭제할 공지가 없어요!');
+  }catch(e){toast('오류!');console.error(e);}
+};
+
+// 공지 확인 및 표시
+async function checkNotice(){
+  try{
+    const {getDocs}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const q2=query(collection(db,'notices'),orderBy('time','desc'));
+    const snap=await getDocs(q2);
+    if(snap.empty)return;
+    const notice=snap.docs[0].data();
+    const today=new Date().toISOString().slice(0,10);
+    if(today>=notice.start&&today<=notice.end){
+      document.getElementById('notice-modal-title').textContent=notice.title;
+      document.getElementById('notice-modal-content').textContent=notice.content;
+      document.getElementById('notice-modal').classList.add('show');
+    }
+  }catch(e){console.error(e);}
+}
 
 window.dlExcel=function(){
   let csv='\uFEFF순번,이름,사번,미션유형,내용,사진,일시,포인트\n';
