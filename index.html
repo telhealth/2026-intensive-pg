@@ -504,7 +504,13 @@ window.logout=function(){
   if(savedUser){
     user=savedUser;
     isAdmin=savedAdmin==='1';
-    go();
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='flex';
+    document.getElementById('user-badge').textContent=user;
+    if(isAdmin)document.getElementById('admin-tab').classList.remove('hidden');
+    updateProg();
+    // Firebase 준비 후 데이터 로드
+    setTimeout(()=>startListen(), 100);
   }
 })();
 
@@ -808,8 +814,8 @@ function renderMypage(){
     if(p.m==='kanbu'){if(!kanbuByDate[ds])kanbuByDate[ds]=true;}
   });
 
-  // 현재 표시 월 (없으면 오늘 기준)
-  if(typeof window._calMonth==='undefined'){
+  // 현재 표시 월 (첫 진입 시만 초기화)
+  if(window._calMonth===undefined||window._calMonth===null){
     window._calMonth=today.getMonth();
     window._calYear=today.getFullYear();
   }
@@ -857,8 +863,8 @@ function renderMypage(){
     else if(hasDaily) cls='has-daily';
     if(isToday) cls+=' today';
     let inner=`<span>${d}</span>`;
-    if(hasDaily&&!hasKanbu) inner+=`<span class="mission-ok">미션 성공!</span>`;
-    if(hasKanbu) inner=`<span class="kanbu-heart">💜</span>`;
+    if(hasDaily) inner+=`<span class="mission-ok">미션 성공!</span>`;
+    if(hasKanbu) inner+=`<span class="kanbu-heart">💜</span>`;
     calHtml+=`<div class="cal-day ${cls}">${inner}</div>`;
   }
   calHtml+=`</div>`;
