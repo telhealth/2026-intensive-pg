@@ -65,6 +65,30 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .footer-date{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:4px;}
 .footer-org{font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:1px;}
 
+/* 포인트 지급 */
+.pts-grant-box{background:var(–surface2);border-radius:12px;padding:16px;margin-bottom:16px;}
+.pts-grant-box h4{font-size:13px;font-weight:700;color:var(–accent2);margin-bottom:12px;}
+.pts-grant-row{display:flex;gap:8px;margin-bottom:8px;}
+.pts-select{flex:1;background:#fff;border:1px solid var(–border);border-radius:8px;padding:9px 10px;font-size:13px;color:var(–text);font-family:inherit;outline:none;}
+.pts-input{width:80px;background:#fff;border:1px solid var(–border);border-radius:8px;padding:9px 10px;font-size:13px;color:var(–text);font-family:inherit;outline:none;}
+.pts-memo{width:100%;background:#fff;border:1px solid var(–border);border-radius:8px;padding:9px 10px;font-size:13px;color:var(–text);font-family:inherit;outline:none;margin-bottom:10px;box-sizing:border-box;}
+.btn-grant{background:linear-gradient(135deg,var(–purple),#a855f7);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;width:100%;}
+.pts-history-box{background:var(–surface2);border-radius:12px;padding:16px;margin-bottom:8px;}
+.pts-history-box h4{font-size:13px;font-weight:700;color:var(–accent2);margin-bottom:10px;}
+.pts-history-item{background:#fff;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;}
+.pts-history-item .hi-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.pts-history-item .hi-name{font-weight:700;color:var(–text);}
+.pts-history-item .hi-pts{font-weight:900;color:var(–purple);}
+.pts-history-item .hi-memo{color:var(–muted);font-size:12px;}
+.pts-history-item .hi-time{color:var(–muted);font-size:11px;margin-top:2px;}
+
+/* 마이페이지 포인트 이력 */
+.my-pts-item{background:var(–surface2);border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;}
+.my-pts-item .pi-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;}
+.my-pts-item .pi-memo{color:var(–text);font-weight:500;}
+.my-pts-item .pi-pts{font-weight:900;color:var(–purple);}
+.my-pts-item .pi-time{color:var(–muted);font-size:11px;}
+
 /* ── 인증 탭 ── */
 .write-box{background:#fff;border:1px solid var(–border);border-radius:var(–radius);padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(26,158,110,0.06);}
 .write-box h3{font-size:14px;font-weight:700;margin-bottom:14px;color:var(–accent2);}
@@ -72,6 +96,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .mission-btn{background:var(–surface2);border:2px solid var(–border);color:var(–text);border-radius:10px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s;font-weight:500;}
 .mission-btn.sel-daily{background:#fff3e8;border-color:var(–orange);color:#b85c10;font-weight:700;}
 .mission-btn.sel-kanbu{background:#f3eeff;border-color:var(–purple);color:#5b21b6;font-weight:700;}
+.mission-btn.sel-mundam{background:#fefce8;border-color:#ca8a04;color:#92400e;font-weight:700;}
 .point-hint{font-size:11px;color:var(–muted);margin-bottom:14px;padding:8px 12px;background:var(–surface2);border-radius:8px;line-height:1.6;white-space:pre-line;}
 #photo-preview{width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px;display:none;}
 .write-box textarea{width:100%;background:var(–surface2);border:1.5px solid var(–border);border-radius:10px;padding:12px;font-size:14px;color:var(–text);font-family:inherit;resize:none;outline:none;margin-bottom:12px;transition:border-color .2s;min-height:80px;}
@@ -93,6 +118,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .post-type-badge{font-size:11px;border-radius:6px;padding:4px 8px;font-weight:700;white-space:nowrap;}
 .badge-daily{background:#e8832a22;color:#c4691e;}
 .badge-kanbu{background:#7c3aed22;color:#6d28d9;}
+.badge-mundam{background:#ca8a0422;color:#92400e;}
 .badge-cheer{background:#1a9e6e22;color:#0d7a52;}
 .post-text{font-size:14px;line-height:1.6;margin-bottom:12px;color:var(–text);}
 .post-img{width:100%;max-height:280px;object-fit:cover;border-radius:10px;margin-bottom:12px;cursor:pointer;}
@@ -286,6 +312,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
     <div class="mission-row">
       <button class="mission-btn sel-daily" data-m="daily" onclick="selMission(this)">📋 데일리 미션</button>
       <button class="mission-btn" data-m="kanbu" onclick="selMission(this)">🤝 깐부 미션</button>
+      <button class="mission-btn" id="mundam-btn" data-m="mundam" onclick="selMission(this)">💬 다이어트 문답</button>
       <button class="mission-btn" data-m="cheer" onclick="selMission(this)">📣 응원 한마디</button>
     </div>
     <div class="point-hint" id="point-hint">📋 데일리 미션 · 인증 1회당 2점 · 총 33회 (최대 66점)</div>
@@ -328,7 +355,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
     <div class="my-info"><h2 id="my-name-big"></h2><p id="my-join-info"></p></div>
   </div>
   <div class="hp-card">
-    <div class="hp-label">🌿 HEALTHY POINT</div>
+    <div class="hp-label">🌿 HEALTHY POINT <span style="font-size:10px;font-weight:400;color:rgba(13,122,82,0.7)">(다이어트 최소 성공 기준 70점 이상)</span></div>
     <div class="hp-score-row">
       <div class="hp-score" id="hp-score">0</div>
       <div class="hp-max">/ 80점</div>
@@ -356,7 +383,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
     <div class="my-stat"><div class="num c3" id="my-kanbu">0</div><div class="label">깐부</div></div>
   </div>
   <div class="my-box">
-    <h4>📅 8주 인증 캘린더</h4>
+    <h4>📅 미션 · 인증 캘린더</h4>
     <p class="cal-desc">데일리 미션을 수행해서 캘린더에 색을 채워요 🌿</p>
     <div id="my-cal"></div>
   </div>
@@ -364,19 +391,43 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
     <h4>📊 미션 달성 현황</h4>
     <div id="my-bars"></div>
   </div>
+  <div class="my-box" id="my-bonus-box" style="display:none">
+    <h4>🎁 관리자 지급 포인트</h4>
+    <div id="my-bonus-list"></div>
+  </div>
 </div>
 
 <!-- 관리자 탭 -->
 <div id="tab-admin" class="hidden">
   <div class="admin-panel">
     <h3>⚙️ 관리자 페이지</h3>
-    <p>전체 인증 현황 확인 및 엑셀 다운로드</p>
+    <p>전체 인증 현황 확인 및 포인트 관리</p>
     <div class="stats-grid">
       <div class="stat-card"><div class="num" id="stat-total">0</div><div class="label">전체 인증</div></div>
       <div class="stat-card"><div class="num" id="stat-members">0</div><div class="label">참가자 수</div></div>
       <div class="stat-card"><div class="num" id="stat-today">0</div><div class="label">오늘 인증</div></div>
     </div>
-    <button class="btn-excel" onclick="dlExcel()">📥 엑셀 다운로드</button>
+
+    <!-- 포인트 지급 -->
+    <div class="pts-grant-box">
+      <h4>🎁 포인트 지급</h4>
+      <div class="pts-grant-row">
+        <select id="grant-user" class="pts-select">
+          <option value="">참가자 선택</option>
+        </select>
+        <input type="number" id="grant-pts" class="pts-input" placeholder="점수" min="1" max="50">
+      </div>
+      <input type="text" id="grant-memo" class="pts-memo" placeholder="지급 사유 입력 (예: 리브레 사용 후기 작성 포인트 지급 완료)">
+      <button class="btn-grant" onclick="grantPoints()">포인트 지급하기 🎁</button>
+    </div>
+
+    <!-- 지급 이력 -->
+    <div class="pts-history-box">
+      <h4>📋 포인트 지급 이력</h4>
+      <div id="grant-history-list"><p style="font-size:13px;color:var(--muted)">아직 지급 이력이 없어요.</p></div>
+    </div>
+
+    <button class="btn-excel" onclick="dlExcel()" style="margin-top:16px">📥 엑셀 다운로드</button>
     <table class="admin-table">
       <thead><tr><th>#</th><th>이름</th><th>미션</th><th>내용</th><th>사진</th><th>일시</th><th>포인트</th></tr></thead>
       <tbody id="admin-tbody"></tbody>
@@ -418,15 +469,30 @@ const db = getFirestore(app);
 
 const CHALLENGE_START = new Date('2026-04-08');
 const TOTAL_DAYS = 56;
-const DAILY_MAX = 33, KANBU_MAX = 7, PTS = 2;
-const MAX_PTS = (DAILY_MAX + KANBU_MAX) * PTS;
+const DAILY_MAX=33, KANBU_MAX=8, MUNDAM_MAX=8, PTS=2, MUNDAM_PTS=1;
+const MAX_PTS = DAILY_MAX*PTS + KANBU_MAX*PTS + MUNDAM_MAX*MUNDAM_PTS; // 66+16+8=90
+
+// 주차별 문답 주제
+const MUNDAM_TOPICS = [
+  '1주차: 리브레 사용후기 작성 (사진 X)',
+  '2주차: 향후 혈당 관리를 위해 내가 꼭 지킬 1가지는?',
+  '3주차: 다이어트가 끝나면 먹고 싶은 음식은?',
+  '4주차: 나한테 가장 재밌는 운동과 가장 힘든 운동은?',
+  '5주차: 사내 다이어트 프로그램 참가하면서 느낀 점을 한줄로 적어본다면?',
+  '6주차: 운동을 시작하고 느껴진 내 몸의 변화는?',
+  '7주차: 정체기를 돌파할 나만의 꿀팁은?',
+  '8주차: 8주간의 여정을 끝낸 소감은? (마지막 문답만 6월 30일에 공개)',
+];
+
 const COLORS = ['#d46a2e','#c4922a','#1a9e6e','#2a6e9d','#9d2a6e','#7c3aed','#3a6bff','#c45a1a','#9d7a2a','#2a9d5a'];
 const EMOJIS = ['👍🏻','🫶🏻','💪🏻','🩷','😢'];
 const MI = {
   daily:{emoji:'📋',text:'데일리 미션',cls:'badge-daily',pts:PTS,
-    hint:'주차별 주제에 맞는 인증사진을 올려주세요. 📸\n(일 1회 인증 필수)'},
+    hint:'주차별 주제에 맞는 인증사진을 올려주세요. 📸\n(일 1회 인증 필수 · 1회당 2점 · 최대 66점)'},
   kanbu:{emoji:'🤝',text:'깐부 미션',cls:'badge-kanbu',pts:PTS,
-    hint:'🤝 깐부 미션 🩷 : 각각 개별로 올려야 깐부 미션 인증으로 내 점수가 인정됩니다.\n1회당 2점 · 총 7회 (최대 14점)'},
+    hint:'🤝 깐부 미션 🩷 : 각각 개별로 올려야 깐부 미션 인증으로 내 점수가 인정됩니다.\n1회당 2점 · 주 1회 · 총 8주 (최대 16점)'},
+  mundam:{emoji:'💬',text:'다이어트 문답',cls:'badge-mundam',pts:MUNDAM_PTS,
+    hint:''},  // hint는 동적으로 설정
   cheer:{emoji:'📣',text:'응원',cls:'badge-cheer',pts:0,
     hint:'📣 응원 한마디 · 동료를 응원해요! (포인트 없음)'}
 };
@@ -532,6 +598,7 @@ function startListen(){
         '<div class="empty-state"><div class="emoji">⚠️</div><p>데이터를 불러오지 못했어요.<br>잠시 후 다시 시도해주세요.</p></div>';
     }
   );
+  startGrantListen();
 }
 
 function updateProg(){
@@ -571,16 +638,23 @@ function calcEarnedPts(mine){
   });
   const dailyPts=dailyDays.size*PTS;
 
-  // 깐부: 2주차부터, 주차별 최초 1회만
+  // 깐부: 1주차부터, 주차별 최초 1회만
   const kanbuWeeks=new Set();
   mine.filter(p=>p.m==='kanbu').forEach(p=>{
     const d=getPostDate(p);if(!d)return;
-    const wk=getWeekNum(d);
-    if(wk>=2)kanbuWeeks.add(wk);
+    kanbuWeeks.add(getWeekNum(d));
   });
   const kanbuPts=kanbuWeeks.size*PTS;
 
-  return{dailyPts,kanbuPts,dailyDays:dailyDays.size,kanbuWeeks:kanbuWeeks.size};
+  // 문답: 주차별 최초 1회만
+  const mundamWeeks=new Set();
+  mine.filter(p=>p.m==='mundam').forEach(p=>{
+    const d=getPostDate(p);if(!d)return;
+    mundamWeeks.add(getWeekNum(d));
+  });
+  const mundamPts=mundamWeeks.size*MUNDAM_PTS;
+
+  return{dailyPts,kanbuPts,mundamPts,dailyDays:dailyDays.size,kanbuWeeks:kanbuWeeks.size,mundamWeeks:mundamWeeks.size};
 }
 
 window.selMission=function(btn){
@@ -601,25 +675,72 @@ window.handlePhoto=async function(input){
   toast('사진 추가 완료! ✅');
 };
 
+// 현재 주차
+function getCurrentWeek(){
+  const diff=Math.floor((Date.now()-CHALLENGE_START)/86400000);
+  return Math.min(Math.max(Math.ceil((diff+1)/7),1),8);
+}
+// 문답 활성화 여부 (금 09:00 ~ 일 18:00)
+function isMundamActive(){
+  const now=new Date();
+  const day=now.getDay();
+  const timeVal=now.getHours()*60+now.getMinutes();
+  if(day===5&&timeVal>=540) return true;
+  if(day===6) return true;
+  if(day===0&&timeVal<1080) return true;
+  return false;
+}
+
+window.selMission=function(btn){
+  const m=btn.dataset.m;
+  if(m==='mundam'&&!isMundamActive()){
+    toast('문답은 금요일 오전 9시 ~ 일요일 오후 6시에만 열려요!');
+    return;
+  }
+  document.querySelectorAll('.mission-btn').forEach(b=>b.classList.remove('sel-daily','sel-kanbu','sel-mundam'));
+  curMission=m;
+  if(m==='daily') btn.classList.add('sel-daily');
+  else if(m==='kanbu') btn.classList.add('sel-kanbu');
+  else if(m==='mundam') btn.classList.add('sel-mundam');
+  if(m==='mundam'){
+    const wk=getCurrentWeek();
+    MI.mundam.hint='💬 다이어트 문답 · 1회당 1점 · 주 1회 (최대 8점)\n\n📝 이번 주 주제:\n'+MUNDAM_TOPICS[wk-1];
+  }
+  document.getElementById('point-hint').textContent=MI[m]?.hint||'';
+};
+
 window.submitPost=async function(){
-  if(!curPhoto){toast('사진을 꼭 추가해주세요! 📷');return;}
+  // 문답은 사진 불필요
+  if(curMission!=='mundam'&&!curPhoto){toast('사진을 꼭 추가해주세요! 📷');return;}
+  if(curMission==='mundam'&&!isMundamActive()){toast('문답 시간이 아니에요!');return;}
   const text=document.getElementById('post-text').value.trim();
+  if(curMission==='mundam'&&!text){toast('문답 내용을 입력해주세요!');return;}
   const mine=allPosts.filter(p=>p.author===user);
   if(curMission==='daily'&&mine.filter(p=>p.m==='daily').length>=DAILY_MAX){toast('데일리 미션은 최대 33회!');return;}
-  if(curMission==='kanbu'&&mine.filter(p=>p.m==='kanbu').length>=KANBU_MAX){toast('깐부 미션은 최대 7회!');return;}
+  if(curMission==='kanbu'){
+    const wk=getCurrentWeek();
+    const thisWeekKanbu=mine.filter(p=>p.m==='kanbu'&&getWeekNum(getPostDate(p))===wk);
+    if(thisWeekKanbu.length>=1){toast('깐부 미션은 주 1회만 점수 인정돼요!');return;}
+  }
+  if(curMission==='mundam'){
+    const wk=getCurrentWeek();
+    const thisWeekMundam=mine.filter(p=>p.m==='mundam'&&getWeekNum(getPostDate(p))===wk);
+    if(thisWeekMundam.length>=1){toast('문답은 주 1회만 점수 인정돼요!');return;}
+  }
   const btn=document.getElementById('btn-post');
   btn.disabled=true;btn.textContent='올리는 중...';
   try{
     await addDoc(collection(db,'posts'),{
-      author:user,m:curMission,text,photo:curPhoto,
-      time:serverTimestamp(),reactions:{},comments:[],pts:MI[curMission].pts
+      author:user,m:curMission,text,photo:curPhoto||null,
+      time:serverTimestamp(),reactions:{},comments:[],pts:MI[curMission]?.pts||0
     });
     document.getElementById('post-text').value='';
     const pv=document.getElementById('photo-preview');pv.style.display='none';pv.src='';
     document.getElementById('photo-status').textContent='';
     document.getElementById('photo-input').value='';
     curPhoto=null;
-    toast(MI[curMission].pts>0?`인증 완료! +${MI[curMission].pts}점 💪`:'응원 완료! 📣');
+    const mi=MI[curMission];
+    toast(mi.pts>0?`인증 완료! +${mi.pts}점 💪`:'응원 완료! 📣');
   }catch(e){toast('오류가 발생했어요!');console.error(e);}
   btn.disabled=false;btn.textContent='올리기 🚀';
 };
@@ -781,10 +902,13 @@ function renderMypage(){
   const color=gc(user);
   const dCnt=mine.filter(p=>p.m==='daily').length;
   const kCnt=mine.filter(p=>p.m==='kanbu').length;
+  const mCnt=mine.filter(p=>p.m==='mundam').length;
   const cCnt=mine.filter(p=>p.m==='cheer').length;
-  const {dailyPts,kanbuPts,dailyDays,kanbuWeeks}=calcEarnedPts(mine);
-  const totalPts=dailyPts+kanbuPts;
-  const pct=Math.round(totalPts/MAX_PTS*100);
+  const {dailyPts,kanbuPts,mundamPts,dailyDays,kanbuWeeks,mundamWeeks}=calcEarnedPts(mine);
+  const myGrants=(allGrants||[]).filter(g=>g.target===user);
+  const bonusPts=myGrants.reduce((s,g)=>s+(g.pts||0),0);
+  const totalPts=dailyPts+kanbuPts+mundamPts+bonusPts;
+  const pct=Math.round(totalPts/(MAX_PTS)*100);
 
   const av=document.getElementById('my-avatar-big');
   av.textContent=user[0];av.style.background=color+'22';av.style.color=color;
@@ -806,12 +930,13 @@ function renderMypage(){
 
   // 날짜별 포스트 맵
   const today=new Date(),todayStr=today.toDateString();
-  const dailyByDate={}, kanbuByDate={};
+  const dailyByDate={}, kanbuByDate={}, mundamByDate={};
   mine.forEach(p=>{
     const d=getPostDate(p);if(!d)return;
     const ds=d.toDateString();
-    if(p.m==='daily'){if(!dailyByDate[ds])dailyByDate[ds]=true;}
-    if(p.m==='kanbu'){if(!kanbuByDate[ds])kanbuByDate[ds]=true;}
+    if(p.m==='daily') dailyByDate[ds]=true;
+    if(p.m==='kanbu') kanbuByDate[ds]=true;
+    if(p.m==='mundam') mundamByDate[ds]=true;
   });
 
   // 현재 표시 월 (첫 진입 시만 초기화)
@@ -858,6 +983,7 @@ function renderMypage(){
     const inRange=dt>=CAL_START&&dt<=CAL_END;
     const hasDaily=!!dailyByDate[ds];
     const hasKanbu=!!kanbuByDate[ds];
+    const hasMundam=!!mundamByDate[ds];
     let cls='';
     if(!inRange) cls='out-range';
     else if(hasDaily) cls='has-daily';
@@ -865,20 +991,39 @@ function renderMypage(){
     let inner=`<span>${d}</span>`;
     if(hasDaily) inner+=`<span class="mission-ok">미션 성공!</span>`;
     if(hasKanbu) inner+=`<span class="kanbu-heart">💜</span>`;
+    if(hasMundam) inner+=`<span class="kanbu-heart">💛</span>`;
     calHtml+=`<div class="cal-day ${cls}">${inner}</div>`;
   }
   calHtml+=`</div>`;
   calHtml+=`<div class="cal-legend">
-    <span><span class="leg-dot" style="background:#ffe8cc;border:1px solid var(--orange)"></span>데일리 인증</span>
-    <span>💜 깐부 인증</span>
+    <span><span class="leg-dot" style="background:#ffe8cc;border:1px solid var(--orange)"></span>데일리</span>
+    <span>💜 깐부</span>
+    <span>💛 문답</span>
   </div>`;
   calHtml+=`</div>`;
   document.getElementById('my-cal').innerHTML=calHtml;
 
+  // 보너스 포인트 이력
+  const bonusBox=document.getElementById('my-bonus-box');
+  const bonusList=document.getElementById('my-bonus-list');
+  if(myGrants.length>0){
+    bonusBox.style.display='';
+    bonusList.innerHTML=myGrants.map(g=>{
+      const dt=g.time?new Date(g.time.toMillis?g.time.toMillis():g.time):new Date();
+      const ds=`${dt.getMonth()+1}/${dt.getDate()} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+      return `<div class="my-pts-item">
+        <div class="pi-top"><span class="pi-memo">${esc(g.memo)}</span><span class="pi-pts">+${g.pts}pt</span></div>
+        <div class="pi-time">${ds}</div>
+      </div>`;
+    }).join('');
+  }else{
+    bonusBox.style.display='none';
+  }
   const tot=mine.length||1;
   document.getElementById('my-bars').innerHTML=`
     <div class="my-type-bar"><div class="tbar-label"><span>📋 데일리 미션</span><span>${dCnt}회 올림 · 점수인정 ${dailyDays}일 · ${dailyPts}점</span></div><div class="bar-bg"><div class="bar-fill bar-d" style="width:${Math.round(dailyDays/DAILY_MAX*100)}%"></div></div></div>
     <div class="my-type-bar"><div class="tbar-label"><span>🤝 깐부 미션</span><span>${kCnt}회 올림 · 점수인정 ${kanbuWeeks}주 · ${kanbuPts}점</span></div><div class="bar-bg"><div class="bar-fill bar-k" style="width:${Math.round(kanbuWeeks/KANBU_MAX*100)}%"></div></div></div>
+    <div class="my-type-bar"><div class="tbar-label"><span>💬 다이어트 문답</span><span>${mundamWeeks}주 · ${mundamPts}점</span></div><div class="bar-bg"><div class="bar-fill" style="width:${Math.round(mundamWeeks/MUNDAM_MAX*100)}%;background:linear-gradient(90deg,#ca8a04,#fbbf24)"></div></div></div>
     <div class="my-type-bar"><div class="tbar-label"><span>📣 응원</span><span>${cCnt}회</span></div><div class="bar-bg"><div class="bar-fill bar-c" style="width:${Math.round(cCnt/tot*100)}%"></div></div></div>`;
 }
 
@@ -888,6 +1033,31 @@ function renderAdmin(){
   document.getElementById('stat-total').textContent=allPosts.length;
   document.getElementById('stat-members').textContent=members;
   document.getElementById('stat-today').textContent=allPosts.filter(p=>p.time&&new Date(p.time.toMillis?p.time.toMillis():p.time).toDateString()===today).length;
+
+  // 참가자 선택박스 업데이트
+  const sel=document.getElementById('grant-user');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">참가자 선택</option>';
+  Object.keys(MEMBERS).forEach(n=>{
+    sel.innerHTML+=`<option value="${esc(n)}" ${cur===n?'selected':''}>${esc(n)}</option>`;
+  });
+
+  // 포인트 지급 이력
+  const histEl=document.getElementById('grant-history-list');
+  const grants=allGrants||[];
+  if(!grants.length){histEl.innerHTML='<p style="font-size:13px;color:var(--muted)">아직 지급 이력이 없어요.</p>';}
+  else{
+    histEl.innerHTML=grants.map(g=>{
+      const dt=g.time?new Date(g.time.toMillis?g.time.toMillis():g.time):new Date();
+      const ds=`${dt.getMonth()+1}/${dt.getDate()} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+      return `<div class="pts-history-item">
+        <div class="hi-top"><span class="hi-name">${esc(g.target)}</span><span class="hi-pts">+${g.pts}pt</span></div>
+        <div class="hi-memo">${esc(g.memo)}</div>
+        <div class="hi-time">${ds} · 지급자: ${esc(g.by)}</div>
+      </div>`;
+    }).join('');
+  }
+
   const tbody=document.getElementById('admin-tbody');
   if(!allPosts.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">인증 기록이 없습니다</td></tr>';return;}
   tbody.innerHTML=allPosts.map((p,i)=>{
@@ -899,6 +1069,38 @@ function renderAdmin(){
       <td>${p.photo?'✅':'-'}</td><td>${ds}</td><td style="color:var(--green);font-weight:700">${p.pts||0}pt</td></tr>`;
   }).join('');
 }
+
+// 포인트 지급
+let allGrants=[];
+let grantsUnsub=null;
+function startGrantListen(){
+  if(grantsUnsub)return;
+  const q2=query(collection(db,'grants'),orderBy('time','desc'));
+  grantsUnsub=onSnapshot(q2,snap=>{
+    allGrants=snap.docs.map(d=>({id:d.id,...d.data()}));
+    const activeTab=document.querySelector('.tab.active');
+    const nm=activeTab?.getAttribute('onclick')?.match(/'(\w+)'/)?.[1]||'feed';
+    if(nm==='admin')renderAdmin();
+    if(nm==='mypage')renderMypage();
+  },err=>console.error('grants 오류:',err));
+}
+
+window.grantPoints=async function(){
+  const target=document.getElementById('grant-user').value;
+  const pts=parseInt(document.getElementById('grant-pts').value);
+  const memo=document.getElementById('grant-memo').value.trim();
+  if(!target){toast('참가자를 선택해주세요!');return;}
+  if(!pts||pts<1){toast('점수를 입력해주세요!');return;}
+  if(!memo){toast('지급 사유를 입력해주세요!');return;}
+  try{
+    await addDoc(collection(db,'grants'),{
+      target,pts,memo,by:user,time:serverTimestamp()
+    });
+    document.getElementById('grant-pts').value='';
+    document.getElementById('grant-memo').value='';
+    toast(`${target}님에게 ${pts}점 지급 완료! 🎁`);
+  }catch(e){toast('오류가 발생했어요!');console.error(e);}
+};
 
 window.dlExcel=function(){
   let csv='\uFEFF순번,이름,사번,미션유형,내용,사진,일시,포인트\n';
