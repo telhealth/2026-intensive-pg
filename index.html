@@ -55,7 +55,13 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .tab{flex:1;padding:11px 4px;font-size:12px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.6);white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit;text-align:center;}
 .tab.active{color:#fff;border-bottom-color:#fff;font-weight:700;}
 
-.main{flex:1;padding:18px;max-width:680px;margin:0 auto;width:100%;}
+.main{flex:1;padding:18px;max-width:680px;margin:0 auto;width:100%;overflow:hidden;}
+
+/* 푸터 */
+.footer{background:#0a6644;padding:20px;text-align:center;margin-top:auto;}
+.footer-title{font-size:14px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px;}
+.footer-date{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:4px;}
+.footer-org{font-size:11px;color:rgba(255,255,255,0.5);letter-spacing:1px;}
 
 /* ── 인증 탭 ── */
 .write-box{background:#fff;border:1px solid var(–border);border-radius:var(–radius);padding:20px;margin-bottom:16px;box-shadow:0 2px 8px rgba(26,158,110,0.06);}
@@ -372,6 +378,13 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 ```
 
   </div>
+
+  <div class="footer">
+    <div class="footer-title">🌿 2026 올바른 다이어트 (Intensive)</div>
+    <div class="footer-date">2026.05.13 ~ 2026.07.02</div>
+    <div class="footer-org">TEK SHE HEALTH</div>
+  </div>
+
 </div>
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
@@ -689,8 +702,8 @@ function makePodium(items, valueKey, labelFn){
 }
 
 function renderRanking(){
-  const weekPosts=getWeekPosts(allPosts);
-  const names=[...new Set(allPosts.map(p=>p.author))];
+  const weekPosts=getWeekPosts(allPosts).filter(p=>p.author);
+  const names=[...new Set(allPosts.filter(p=>p.author).map(p=>p.author))];
 
   // 이번 주 인증왕
   const weekCert=names.map(n=>({name:n,cnt:weekPosts.filter(p=>p.author===n&&p.m!=='cheer').length}))
