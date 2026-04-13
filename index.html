@@ -177,19 +177,23 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .my-box .cal-desc{font-size:11px;color:var(–muted);margin-bottom:12px;line-height:1.5;}
 
 /* 월별 달력 */
-.month-cal{margin-bottom:16px;}
-.month-title{font-size:13px;font-weight:700;color:var(–text);text-align:center;margin-bottom:8px;}
+.month-cal{margin-bottom:4px;}
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.month-nav-btn{background:none;border:1px solid var(–border);border-radius:8px;padding:4px 12px;font-size:16px;cursor:pointer;color:var(–text);font-family:inherit;}
+.month-nav-btn:hover{background:var(–surface2);}
+.month-title{font-size:14px;font-weight:700;color:var(–text);}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
 .cal-dow{font-size:10px;font-weight:700;color:var(–muted);text-align:center;padding:3px 0;}
 .cal-dow.sun{color:#e05555;}
 .cal-dow.sat{color:#3a86ff;}
-.cal-day{aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:11px;font-weight:600;color:var(–muted);background:var(–surface2);border:1px solid transparent;position:relative;cursor:default;}
+.cal-day{border-radius:6px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:11px;font-weight:600;color:var(–muted);background:var(–surface2);border:1px solid transparent;position:relative;min-height:36px;padding:3px 2px;gap:1px;}
 .cal-day.empty{background:transparent;}
 .cal-day.out-range{opacity:.2;background:var(–surface2);}
 .cal-day.has-daily{background:#ffe8cc;border-color:var(–orange);color:#b85c10;font-weight:700;}
 .cal-day.today{box-shadow:0 0 0 2px var(–accent);color:var(–accent);font-weight:700;}
-.cal-day .kanbu-heart{font-size:12px;line-height:1;position:absolute;bottom:1px;}
-.cal-legend{display:flex;gap:14px;margin-top:4px;font-size:11px;color:var(–muted);}
+.cal-day .mission-ok{font-size:9px;color:#b85c10;line-height:1;}
+.cal-day .kanbu-heart{font-size:18px;line-height:1;}
+.cal-legend{display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(–muted);}
 .leg-dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:3px;vertical-align:middle;}
 .my-type-bar{margin-bottom:12px;}
 .tbar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;}
@@ -355,10 +359,6 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
     <h4>📅 8주 인증 캘린더</h4>
     <p class="cal-desc">데일리 미션을 수행해서 캘린더에 색을 채워요 🌿</p>
     <div id="my-cal"></div>
-    <div style="display:flex;gap:14px;margin-top:10px;font-size:11px;color:var(--muted);">
-      <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#fff3e8;border:1px solid var(--orange);margin-right:3px"></span>데일리</span>
-      <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#f3eeff;border:1px solid var(--purple);margin-right:3px"></span>깐부 💜</span>
-    </div>
   </div>
   <div class="my-box">
     <h4>📊 미션 달성 현황</h4>
@@ -478,16 +478,16 @@ function go(){
   document.getElementById('app').style.display='flex';
   document.getElementById('user-badge').textContent=user;
   if(isAdmin)document.getElementById('admin-tab').classList.remove('hidden');
-  // 세션 저장 (탭 닫을 때까지 유지)
-  sessionStorage.setItem('diet_user', user);
-  sessionStorage.setItem('diet_admin', isAdmin?'1':'0');
+  // 로그인 유지 저장
+  localStorage.setItem('diet_user', user);
+  localStorage.setItem('diet_admin', isAdmin?'1':'0');
   updateProg();startListen();
 }
 window.logout=function(){
   if(unsubscribe)unsubscribe();
   user=null;isAdmin=false;curPhoto=null;allPosts=[];
-  sessionStorage.removeItem('diet_user');
-  sessionStorage.removeItem('diet_admin');
+  localStorage.removeItem('diet_user');
+  localStorage.removeItem('diet_admin');
   document.getElementById('login-screen').style.display='';
   document.getElementById('app').style.display='none';
   document.getElementById('name-input').value='';
@@ -497,10 +497,10 @@ window.logout=function(){
   ['feed','cert','ranking','mypage','admin'].forEach((t,i)=>document.getElementById('tab-'+t).classList.toggle('hidden',i!==0));
 };
 
-// 새로고침 시 세션 복원
+// 새로고침 시 로그인 복원
 (function restoreSession(){
-  const savedUser=sessionStorage.getItem('diet_user');
-  const savedAdmin=sessionStorage.getItem('diet_admin');
+  const savedUser=localStorage.getItem('diet_user');
+  const savedAdmin=localStorage.getItem('diet_admin');
   if(savedUser){
     user=savedUser;
     isAdmin=savedAdmin==='1';
@@ -808,54 +808,65 @@ function renderMypage(){
     if(p.m==='kanbu'){if(!kanbuByDate[ds])kanbuByDate[ds]=true;}
   });
 
-  // 챌린지 기간: 2026.04.08 ~ 2026.07.02
+  // 현재 표시 월 (없으면 오늘 기준)
+  if(typeof window._calMonth==='undefined'){
+    window._calMonth=today.getMonth();
+    window._calYear=today.getFullYear();
+  }
+
+  window.calPrev=function(){
+    window._calMonth--;
+    if(window._calMonth<0){window._calMonth=11;window._calYear--;}
+    renderMypage();
+  };
+  window.calNext=function(){
+    window._calMonth++;
+    if(window._calMonth>11){window._calMonth=0;window._calYear++;}
+    renderMypage();
+  };
+
   const CAL_START=new Date('2026-04-08');
   const CAL_END=new Date('2026-07-02');
   const DOWS=['일','월','화','수','목','금','토'];
-  const MONTHS=[
-    {year:2026,month:3},  // 4월 (0-indexed)
-    {year:2026,month:4},  // 5월
-    {year:2026,month:5},  // 6월
-    {year:2026,month:6},  // 7월
-  ];
+  const year=window._calYear, month=window._calMonth;
+  const monthName=(month+1)+'월';
 
-  let calHtml='';
-  MONTHS.forEach(({year,month})=>{
-    const monthName=(month+1)+'월';
-    calHtml+=`<div class="month-cal">`;
-    calHtml+=`<div class="month-title">${year}년 ${monthName}</div>`;
-    calHtml+=`<div class="cal-grid">`;
-    // 요일 헤더
-    DOWS.forEach((d,i)=>{
-      const cls=i===0?'sun':i===6?'sat':'';
-      calHtml+=`<div class="cal-dow ${cls}">${d}</div>`;
-    });
-    // 첫날 요일
-    const firstDay=new Date(year,month,1).getDay();
-    for(let i=0;i<firstDay;i++) calHtml+=`<div class="cal-day empty"></div>`;
-    // 날짜
-    const daysInMonth=new Date(year,month+1,0).getDate();
-    for(let d=1;d<=daysInMonth;d++){
-      const dt=new Date(year,month,d);
-      const ds=dt.toDateString();
-      const isToday=ds===todayStr;
-      const inRange=dt>=CAL_START&&dt<=CAL_END;
-      const hasDaily=!!dailyByDate[ds];
-      const hasKanbu=!!kanbuByDate[ds];
-      let cls='';
-      if(!inRange) cls='out-range';
-      else if(hasDaily) cls='has-daily';
-      if(isToday) cls+=' today';
-      const heart=hasKanbu?`<span class="kanbu-heart">💜</span>`:'';
-      calHtml+=`<div class="cal-day ${cls}">${d}${heart}</div>`;
-    }
-    calHtml+=`</div></div>`;
+  let calHtml=`<div class="month-cal">`;
+  calHtml+=`<div class="month-nav">
+    <button class="month-nav-btn" onclick="calPrev()">&#8249;</button>
+    <div class="month-title">${year}년 ${monthName}</div>
+    <button class="month-nav-btn" onclick="calNext()">&#8250;</button>
+  </div>`;
+  calHtml+=`<div class="cal-grid">`;
+  DOWS.forEach((d,i)=>{
+    const cls=i===0?'sun':i===6?'sat':'';
+    calHtml+=`<div class="cal-dow ${cls}">${d}</div>`;
   });
-
+  const firstDay=new Date(year,month,1).getDay();
+  for(let i=0;i<firstDay;i++) calHtml+=`<div class="cal-day empty"></div>`;
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  for(let d=1;d<=daysInMonth;d++){
+    const dt=new Date(year,month,d);
+    const ds=dt.toDateString();
+    const isToday=ds===todayStr;
+    const inRange=dt>=CAL_START&&dt<=CAL_END;
+    const hasDaily=!!dailyByDate[ds];
+    const hasKanbu=!!kanbuByDate[ds];
+    let cls='';
+    if(!inRange) cls='out-range';
+    else if(hasDaily) cls='has-daily';
+    if(isToday) cls+=' today';
+    let inner=`<span>${d}</span>`;
+    if(hasDaily&&!hasKanbu) inner+=`<span class="mission-ok">미션 성공!</span>`;
+    if(hasKanbu) inner=`<span class="kanbu-heart">💜</span>`;
+    calHtml+=`<div class="cal-day ${cls}">${inner}</div>`;
+  }
+  calHtml+=`</div>`;
   calHtml+=`<div class="cal-legend">
     <span><span class="leg-dot" style="background:#ffe8cc;border:1px solid var(--orange)"></span>데일리 인증</span>
     <span>💜 깐부 인증</span>
   </div>`;
+  calHtml+=`</div>`;
   document.getElementById('my-cal').innerHTML=calHtml;
 
   const tot=mine.length||1;
