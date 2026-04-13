@@ -56,14 +56,14 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .tab.active{color:#fff;border-bottom-color:#fff;font-weight:700;}
 
 .tab-spacer{height:1px;}
-/* fixed 헤더 높이만큼 상단 여백 */
-#app{padding-top:143px;}
+.header-spacer{height:143px;flex-shrink:0;}
+#app{padding-top:0;}
 .main{flex:1;padding:18px;max-width:680px;margin:0 auto;width:100%;background:var(–bg);}
 
 /* 정보 팝업 */
 .info-btn{background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5);color:#fff;border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;margin-left:4px;}
 .info-btn:hover{background:rgba(255,255,255,0.35);}
-.info-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);z-index:9998;align-items:center;justify-content:center;padding:20px;}
+.info-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:99999;align-items:center;justify-content:center;padding:20px;}
 .info-modal.show{display:flex;}
 .info-modal-box{background:#fff;border-radius:20px;padding:24px;max-width:380px;width:100%;max-height:80vh;overflow-y:auto;}
 .info-modal-box h3{font-size:16px;font-weight:900;color:var(–accent2);margin-bottom:4px;}
@@ -73,7 +73,15 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .info-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;}
 .info-row span:last-child{font-weight:700;color:var(–accent2);}
 .info-note{font-size:11px;color:var(–muted);margin-top:6px;line-height:1.6;}
-.info-close{width:100%;background:var(–accent);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px;}
+.info-close{width:100%;background:#1a9e6e;color:#fff;border:none;border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px;}
+.info-mission-item{padding:10px 0;border-bottom:1px solid var(–border);}
+.info-mission-item:last-child{border-bottom:none;}
+.info-mission-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.info-mission-top span:first-child{font-size:13px;font-weight:700;color:var(–text);}
+.info-mission-pts{font-size:13px;font-weight:900;color:var(–accent2);}
+.info-mission-desc{font-size:11px;color:var(–muted);line-height:1.6;}
+.info-bonus-row{display:flex;justify-content:space-between;font-size:11px;padding:2px 0;color:var(–muted);}
+.info-bonus-row span:last-child{font-weight:700;color:var(–accent2);}
 
 /* 푸터 */
 .footer{background:#0a6644;padding:20px;text-align:center;margin-top:auto;}
@@ -286,6 +294,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 
 <div id="app">
+  <div class="header-spacer"></div>
   <div class="header">
     <div>
       <div class="header-title">2026 인텐시브 케어 프로그램</div>
@@ -376,7 +385,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
     <div class="hp-label">🌿 HEALTHY POINT <span style="font-size:10px;font-weight:400;color:rgba(13,122,82,0.7)">(다이어트 최소 성공 기준 70점 이상)</span></div>
     <div class="hp-score-row">
       <div class="hp-score" id="hp-score">0</div>
-      <div class="hp-max">/ 90점</div>
+      <div class="hp-max">/ 100점</div>
       <div class="hp-pct" id="hp-pct"></div>
     </div>
     <div class="hp-bar-bg"><div class="hp-bar-fill" id="hp-bar" style="width:0%"></div></div>
@@ -483,26 +492,49 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 ```
 <div class="info-section">
   <h4>✅ 다이어트 최소 성공 기준</h4>
-  <div class="info-row"><span>몸무게의 5% 감량</span><span>발대식 측정값 기준</span></div>
+  <div class="info-row"><span>몸무게 5% 감량</span><span>발대식 측정값 기준</span></div>
   <div class="info-row"><span>헬시포인트</span><span>70점 이상</span></div>
 </div>
 
 <div class="info-section">
-  <h4>🌿 Healthy Point (총 90점)</h4>
-  <div class="info-row"><span>📋 데일리 미션</span><span>1회 2점 × 33일 = 66점</span></div>
-  <div class="info-row"><span>🤝 깐부 인증</span><span>1회 2점 × 8주 = 16점</span></div>
-  <div class="info-row"><span>💬 다이어트 문답</span><span>1회 1점 × 8주 = 8점</span></div>
-  <div class="info-note">
-    💜 깐부 인증: 파트너와 함께했음을 인증 (각각 개별 업로드)<br>
-    💛 문답: 매주 금요일 오전 9시 ~ 일요일 오후 6시 오픈
-  </div>
-</div>
+  <h4>🌿 Healthy Point (총 100점)</h4>
 
-<div class="info-section">
-  <h4>🎁 감량 보너스 (별도 제출 X)</h4>
-  <div class="info-row"><span>중간점검: 2.5% 이상 감량</span><span>+5점</span></div>
-  <div class="info-row"><span>최종점검: 5% 이상 감량</span><span>+5점</span></div>
-  <div class="info-row"><span>기사회생: 8% 이상 감량</span><span>+10점</span></div>
+  <div class="info-mission-item">
+    <div class="info-mission-top">
+      <span>📋 데일리 미션</span>
+      <span class="info-mission-pts">최대 66점</span>
+    </div>
+    <div class="info-mission-desc">1회 2점 · 총 33일 · 주말 포함 가능</div>
+  </div>
+
+  <div class="info-mission-item">
+    <div class="info-mission-top">
+      <span>🤝 깐부 인증</span>
+      <span class="info-mission-pts">최대 16점</span>
+    </div>
+    <div class="info-mission-desc">1회 2점 · 매주 1회 · 8주 (1주차~8주차)<br>💜 파트너와 함께했음을 각각 개별 업로드</div>
+  </div>
+
+  <div class="info-mission-item">
+    <div class="info-mission-top">
+      <span>💬 다이어트 문답</span>
+      <span class="info-mission-pts">최대 8점</span>
+    </div>
+    <div class="info-mission-desc">1회 1점 · 매주 1회 · 8주<br>💛 매주 금요일 09:00 ~ 일요일 18:00 오픈</div>
+  </div>
+
+  <div class="info-mission-item" style="border-top:1px dashed var(--border);padding-top:10px;margin-top:4px;">
+    <div class="info-mission-top">
+      <span>🎁 감량 보너스</span>
+      <span class="info-mission-pts">최대 10점</span>
+    </div>
+    <div class="info-mission-desc">별도 제출 없이 관리자가 자동 부여해드려요</div>
+    <div style="margin-top:6px;">
+      <div class="info-bonus-row"><span>중간점검 2.5% 이상 감량</span><span>+5점</span></div>
+      <div class="info-bonus-row"><span>최종점검 5% 이상 감량</span><span>+5점</span></div>
+      <div class="info-bonus-row"><span>기사회생 8% 이상 감량</span><span style="color:#e05555;font-weight:700">+10점</span></div>
+    </div>
+  </div>
 </div>
 
 <div class="info-section">
@@ -977,7 +1009,7 @@ function renderMypage(){
   const myGrants=(allGrants||[]).filter(g=>g.target===user);
   const bonusPts=myGrants.reduce((s,g)=>s+(g.pts||0),0);
   const totalPts=dailyPts+kanbuPts+mundamPts+bonusPts;
-  const pct=Math.round(totalPts/(MAX_PTS)*100);
+  const pct=Math.round(totalPts/100*100);
 
   const av=document.getElementById('my-avatar-big');
   av.textContent=user[0];av.style.background=color+'22';av.style.color=color;
