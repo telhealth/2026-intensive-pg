@@ -413,7 +413,7 @@ const MI = {
 let user=null, isAdmin=false, curMission='daily', curPhoto=null;
 let allPosts=[], unsubscribe=null;
 
-const gc=n=>{let h=0;for(let c of n)h+=c.charCodeAt(0);return COLORS[h%COLORS.length];};
+const gc=n=>{if(!n||typeof n!=='string')return COLORS[0];let h=0;for(let c of n)h+=c.charCodeAt(0);return COLORS[h%COLORS.length];};
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
 function compressImage(file){
@@ -592,7 +592,7 @@ function timeAgo(ts){
 function renderFeed(){
   const c=document.getElementById('feed-list');
   if(!allPosts.length){c.innerHTML='<div class="empty-state"><div class="emoji">🏃</div><p>아직 인증이 없어요!</p></div>';return;}
-  c.innerHTML=allPosts.map(p=>{
+  c.innerHTML=allPosts.filter(p=>p.author).map(p=>{
     const mi=MI[p.m]||MI.cheer,color=gc(p.author),reactions=p.reactions||{};
     const liked=(reactions['👍🏻']||[]).includes(user);
     const cmts=(p.comments||[]).map(c=>`
