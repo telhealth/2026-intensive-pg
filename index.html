@@ -473,16 +473,22 @@ window.logout=function(){
 
 function startListen(){
   const q=query(collection(db,'posts'),orderBy('time','desc'));
-  unsubscribe=onSnapshot(q,snap=>{
-    allPosts=snap.docs.map(d=>({id:d.id,...d.data()}));
-    const activeTab=document.querySelector('.tab.active');
-    const nm=activeTab?.getAttribute('onclick')?.match(/'(\w+)'/)?.[1]||'feed';
-    if(nm==='feed')renderFeed();
-    if(nm==='ranking')renderRanking();
-    if(nm==='mypage')renderMypage();
-    if(nm==='admin')renderAdmin();
-    if(nm==='feed'||nm==='cert')renderFeed();
-  });
+  unsubscribe=onSnapshot(q,
+    snap=>{
+      allPosts=snap.docs.map(d=>({id:d.id,...d.data()}));
+      const activeTab=document.querySelector('.tab.active');
+      const nm=activeTab?.getAttribute('onclick')?.match(/'(\w+)'/)?.[1]||'feed';
+      if(nm==='feed')renderFeed();
+      if(nm==='ranking')renderRanking();
+      if(nm==='mypage')renderMypage();
+      if(nm==='admin')renderAdmin();
+    },
+    err=>{
+      console.error('Firebase 오류:', err);
+      document.getElementById('feed-list').innerHTML=
+        '<div class="empty-state"><div class="emoji">⚠️</div><p>데이터를 불러오지 못했어요.<br>잠시 후 다시 시도해주세요.</p></div>';
+    }
+  );
 }
 
 function updateProg(){
