@@ -15,7 +15,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;overflow-x:hidden;}
-#app{display:flex;flex-direction:column;min-height:100vh;padding-top:142px;}
+#app{display:flex;flex-direction:column;min-height:100vh;padding-top:142px;background:var(--bg);}
 
 /* ── 로그인 ── */
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -59,6 +59,8 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 
 .tab-spacer{height:1px;}
 .main{flex:1;padding:16px;max-width:680px;margin:0 auto;width:100%;background:var(–bg);}
+/* 헤더와 탭 사이 빈 공간 완전 채우기 */
+.progress-banner,.tabs{background-color:#0a6644;}
 
 /* 정보 팝업 */
 .info-btn{background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5);color:#fff;border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;margin-left:4px;}
@@ -237,13 +239,14 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .cal-dow{font-size:10px;font-weight:700;color:var(–muted);text-align:center;padding:3px 0;}
 .cal-dow.sun{color:#e05555;}
 .cal-dow.sat{color:#3a86ff;}
-.cal-day{border-radius:6px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:11px;font-weight:600;color:var(–muted);background:var(–surface2);border:1px solid transparent;position:relative;min-height:36px;padding:3px 2px;gap:1px;}
+.cal-day{border-radius:6px;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:11px;font-weight:600;color:var(–muted);background:var(–surface2);border:1px solid transparent;position:relative;min-height:36px;padding:2px 1px;gap:0;}
 .cal-day.empty{background:transparent;}
 .cal-day.out-range{opacity:.2;background:var(–surface2);}
 .cal-day.has-daily{background:#ffe8cc;border-color:var(–orange);color:#b85c10;font-weight:700;}
 .cal-day.today{box-shadow:0 0 0 2px var(–accent);color:var(–accent);font-weight:700;}
-.cal-day .mission-ok{font-size:8px;color:#b85c10;line-height:1;}
-.cal-day .kanbu-heart{font-size:11px;line-height:1;}
+.cal-day .mission-ok{font-size:7px;color:#b85c10;line-height:1;}
+.cal-day .hearts{display:flex;flex-direction:row;gap:1px;line-height:1;}
+.cal-day .kanbu-heart{font-size:10px;line-height:1;}
 .cal-legend{display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(–muted);}
 .leg-dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:3px;vertical-align:middle;}
 .my-type-bar{margin-bottom:12px;}
@@ -278,7 +281,8 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .admin-table th{background:var(–surface2);padding:9px 10px;text-align:left;color:var(–muted);font-weight:500;border-bottom:1px solid var(–border);white-space:nowrap;}
 .admin-table td{padding:9px 10px;border-bottom:1px solid var(–border);white-space:nowrap;}
 
-.empty-state{text-align:center;padding:50px 20px;color:var(–muted);}
+.btn-delete-post{background:none;border:none;cursor:pointer;font-size:14px;padding:2px 4px;opacity:0.5;transition:opacity .2s;}
+.btn-delete-post:hover{opacity:1;}
 .empty-state .emoji{font-size:44px;margin-bottom:10px;}
 .empty-state p{font-size:14px;}
 .loading{text-align:center;padding:40px;color:var(–muted);font-size:14px;}
@@ -425,7 +429,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
     <div class="my-stat"><div class="num" id="my-mundam" style="color:#ca8a04">0</div><div class="label">💬 문답</div></div>
   </div>
   <div class="my-box">
-    <h4>📅 미션 · 인증 캘린더</h4>
+    <h4>📅 인증 캘린더</h4>
     <p class="cal-desc">데일리 미션을 수행해서 캘린더에 색을 채워요 🌿</p>
     <div id="my-cal"></div>
   </div>
@@ -583,7 +587,8 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 
 <div class="info-section">
   <h4>📅 필수 참석</h4>
-  <div class="info-row"><span>발대식</span><span>5월 13일 (화)</span></div>
+  <div class="info-note" style="margin-bottom:8px;color:var(--accent2);font-weight:600;">📍 장소: TEK 오산 교육센터</div>
+  <div class="info-row"><span>발대식</span><span>5월 13일 (수)</span></div>
   <div class="info-row"><span>중간점검</span><span>6월 9일 (화)</span></div>
   <div class="info-row"><span>종료 및 시상식</span><span>7월 2일 (목)</span></div>
 </div>
@@ -598,7 +603,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAybs8l52BCXjB34hRTYHN6lqsNWmZBPUI",
@@ -927,6 +932,7 @@ function renderFeed(){
         ${emojiRow}
         <button class="comment-toggle" onclick="toggleCmt('cmt-${p.id}')">💬 ${(p.comments||[]).length}</button>
         ${p.pts>0?`<span class="post-pts">+${p.pts}pt</span>`:''}
+        ${p.author===user?`<button class="btn-delete-post" onclick="deletePost('${p.id}')">🗑️</button>`:''}
       </div>
       <div class="comments hidden" id="cmt-${p.id}">
         <div>${cmts}</div>
@@ -939,7 +945,13 @@ function renderFeed(){
   }).join('');
 }
 
-window.toggleReaction=async function(postId,emoji){
+window.deletePost=async function(postId){
+  if(!confirm('이 인증을 삭제할까요?\n삭제하면 해당 포인트도 취소돼요.'))return;
+  try{
+    await deleteDoc(doc(db,'posts',postId));
+    toast('삭제 완료! 포인트가 재계산됐어요.');
+  }catch(e){toast('삭제 중 오류가 발생했어요!');console.error(e);}
+};
   const post=allPosts.find(p=>p.id===postId);if(!post)return;
   const reactions=JSON.parse(JSON.stringify(post.reactions||{}));
   if(!reactions[emoji])reactions[emoji]=[];
@@ -1139,9 +1151,10 @@ function renderMypage(){
     else if(hasDaily) cls='has-daily';
     if(isToday) cls+=' today';
     let inner=`<span>${d}</span>`;
-    if(hasDaily) inner+=`<span class="mission-ok">미션 성공!</span>`;
-    if(hasKanbu) inner+=`<span class="kanbu-heart">💜</span>`;
-    if(hasMundam) inner+=`<span class="kanbu-heart">💛</span>`;
+    if(hasDaily) inner+=`<span class="mission-ok">미션!</span>`;
+    const hearts=(hasKanbu?`<span class="kanbu-heart">💜</span>`:'')+
+                 (hasMundam?`<span class="kanbu-heart">💛</span>`:'');
+    if(hearts) inner+=`<span class="hearts">${hearts}</span>`;
     calHtml+=`<div class="cal-day ${cls}">${inner}</div>`;
   }
   calHtml+=`</div>`;
