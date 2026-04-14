@@ -944,6 +944,7 @@ window.deletePost=async function(postId){
     toast('삭제 완료! 포인트가 재계산됐어요.');
   }catch(e){toast('삭제 중 오류가 발생했어요!');console.error(e);}
 };
+window.toggleReaction=async function(postId,emoji){
   const post=allPosts.find(p=>p.id===postId);if(!post)return;
   const reactions=JSON.parse(JSON.stringify(post.reactions||{}));
   if(!reactions[emoji])reactions[emoji]=[];
