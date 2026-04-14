@@ -808,14 +808,6 @@ function calcEarnedPts(mine){
   return{dailyPts,kanbuPts,mundamPts,dailyDays:dailyDays.size,kanbuWeeks:kanbuWeeks.size,mundamWeeks:mundamWeeks.size};
 }
 
-window.selMission=function(btn){
-  document.querySelectorAll('.mission-btn').forEach(b=>b.classList.remove('sel-daily','sel-kanbu'));
-  curMission=btn.dataset.m;
-  if(curMission==='daily')btn.classList.add('sel-daily');
-  else if(curMission==='kanbu')btn.classList.add('sel-kanbu');
-  document.getElementById('point-hint').textContent=MI[curMission].hint;
-};
-
 window.handlePhoto=async function(input){
   const f=input.files[0];if(!f)return;
   toast('사진 압축 중...');
