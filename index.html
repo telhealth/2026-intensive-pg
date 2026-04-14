@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>2026 인텐시브 케어 프로그램</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -15,6 +15,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;overflow-x:hidden;}
+#app{display:flex;flex-direction:column;min-height:100vh;padding-top:142px;}
 
 /* ── 로그인 ── */
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -44,7 +45,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .info-btn{background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5);color:#fff;border-radius:20px;padding:4px 8px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
 
 /* 진행 배너 */
-.progress-banner{background:#0d7a52;padding:8px 14px;position:fixed;top:52px;left:0;right:0;z-index:99;}
+.progress-banner{background:#0d7a52;padding:8px 14px;position:fixed;top:58px;left:0;right:0;z-index:99;}
 .progress-info{display:flex;justify-content:space-between;margin-bottom:6px;}
 .progress-label{font-size:12px;font-weight:700;color:#fff;}
 .progress-days{font-size:11px;color:rgba(255,255,255,0.75);}
@@ -52,13 +53,11 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .progress-bar-fill{height:100%;background:linear-gradient(90deg,#a8f0d0,#fff);border-radius:99px;transition:width 1s ease;}
 
 /* 탭 */
-.tabs{display:flex;background:#0a6644;position:fixed;top:96px;left:0;right:0;z-index:98;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 2px 8px rgba(0,0,0,0.2);}
-.tab{flex:1;padding:10px 4px;font-size:11px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.6);white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit;text-align:center;}
+.tabs{display:flex;background:#0a6644;position:fixed;top:104px;left:0;right:0;z-index:98;border-top:1px solid rgba(255,255,255,0.12);box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+.tab{flex:1;padding:10px 2px;font-size:11px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.6);white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit;text-align:center;}
 .tab.active{color:#fff;border-bottom-color:#fff;font-weight:700;}
 
 .tab-spacer{height:1px;}
-.header-spacer{height:135px;flex-shrink:0;}
-#app{padding-top:0;}
 .main{flex:1;padding:16px;max-width:680px;margin:0 auto;width:100%;background:var(–bg);}
 
 /* 정보 팝업 */
@@ -243,8 +242,8 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .cal-day.out-range{opacity:.2;background:var(–surface2);}
 .cal-day.has-daily{background:#ffe8cc;border-color:var(–orange);color:#b85c10;font-weight:700;}
 .cal-day.today{box-shadow:0 0 0 2px var(–accent);color:var(–accent);font-weight:700;}
-.cal-day .mission-ok{font-size:9px;color:#b85c10;line-height:1;}
-.cal-day .kanbu-heart{font-size:18px;line-height:1;}
+.cal-day .mission-ok{font-size:8px;color:#b85c10;line-height:1;}
+.cal-day .kanbu-heart{font-size:11px;line-height:1;}
 .cal-legend{display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(–muted);}
 .leg-dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:3px;vertical-align:middle;}
 .my-type-bar{margin-bottom:12px;}
@@ -305,7 +304,6 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 
 <div id="app">
-  <div class="header-spacer"></div>
   <div class="header">
     <div>
       <div class="header-title">2026 인텐시브 케어 프로그램</div>
@@ -410,13 +408,13 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
       <div class="hp-item">
         <div class="hp-item-label">🤝 깐부 미션</div>
         <div class="hp-item-val c-kanbu" id="hp-k-pts">0점</div>
-        <div class="hp-item-sub" id="hp-k-cnt">0 / 8주</div>
+        <div class="hp-item-sub" id="hp-k-cnt">0 / 8회</div>
         <div class="hp-item-prog" id="hp-k-pct" style="color:var(--purple)"></div>
       </div>
       <div class="hp-item">
         <div class="hp-item-label">💬 다이어트 문답</div>
         <div class="hp-item-val" id="hp-m-pts" style="color:#ca8a04">0점</div>
-        <div class="hp-item-sub" id="hp-m-cnt">0 / 8주</div>
+        <div class="hp-item-sub" id="hp-m-cnt">0 / 8회</div>
         <div class="hp-item-prog" id="hp-m-pct" style="color:#ca8a04"></div>
       </div>
     </div>
@@ -1071,10 +1069,10 @@ function renderMypage(){
   document.getElementById('hp-d-cnt').textContent=dailyDays+' / '+DAILY_MAX+'일';
   document.getElementById('hp-d-pct').textContent=Math.round(dailyDays/DAILY_MAX*100)+'% 달성';
   document.getElementById('hp-k-pts').textContent=kanbuPts+'점';
-  document.getElementById('hp-k-cnt').textContent=kanbuWeeks+' / '+KANBU_MAX+'주';
+  document.getElementById('hp-k-cnt').textContent=kanbuWeeks+' / 8회';
   document.getElementById('hp-k-pct').textContent=Math.round(kanbuWeeks/KANBU_MAX*100)+'% 달성';
   document.getElementById('hp-m-pts').textContent=mundamPts+'점';
-  document.getElementById('hp-m-cnt').textContent=mundamWeeks+' / '+MUNDAM_MAX+'주';
+  document.getElementById('hp-m-cnt').textContent=mundamWeeks+' / 8회';
   document.getElementById('hp-m-pct').textContent=Math.round(mundamWeeks/MUNDAM_MAX*100)+'% 달성';
   document.getElementById('my-daily').textContent=dCnt;
   document.getElementById('my-kanbu').textContent=kCnt;
