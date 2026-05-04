@@ -32,10 +32,13 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .admin-link{margin-top:14px;font-size:12px;color:var(–muted);cursor:pointer;text-decoration:underline;}
 
 /* ── 앱 ── */
-#app{display:none;flex-direction:column;min-height:100vh;padding-top:142px;}
+#app{display:none;flex-direction:column;min-height:100vh;}
+
+/* 고정 헤더 전체를 하나의 컨테이너로 */
+.fixed-top{position:fixed;top:0;left:0;right:0;z-index:300;background:#146a47;}
 
 /* 헤더 */
-.header{background:#146a47;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:300;box-shadow:none;}
+.header{background:#146a47;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;}
 .header-title{font-size:14px;font-weight:900;color:#fff;letter-spacing:-0.3px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
 .header-sub{font-size:10px;color:rgba(255,255,255,0.8);margin-top:1px;}
 .header-right{display:flex;align-items:center;gap:5px;flex-shrink:0;}
@@ -45,7 +48,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .info-btn{background:rgba(255,255,255,0.2);border:1.5px solid rgba(255,255,255,0.5);color:#fff;border-radius:20px;padding:4px 8px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;}
 
 /* 진행 배너 */
-.progress-banner{background:#116040;padding:8px 14px;position:fixed;top:58px;left:0;right:0;z-index:299;}
+.progress-banner{background:#116040;padding:8px 14px;}
 .progress-info{display:flex;justify-content:space-between;margin-bottom:6px;}
 .progress-label{font-size:12px;font-weight:700;color:#fff;}
 .progress-days{font-size:11px;color:rgba(255,255,255,0.75);}
@@ -53,13 +56,12 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .progress-bar-fill{height:100%;background:linear-gradient(90deg,#a8f0d0,#fff);border-radius:99px;transition:width 1s ease;}
 
 /* 탭 */
-.tabs{display:flex;background:#0a5c3a;position:fixed;top:104px;left:0;right:0;z-index:298;border-top:none;box-shadow:0 3px 8px rgba(0,0,0,0.35);}
+.tabs{display:flex;background:#0a5c3a;border-top:none;box-shadow:0 3px 8px rgba(0,0,0,0.35);}
 .tab{flex:1;padding:10px 2px;font-size:11px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.6);white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;background:none;border-left:none;border-right:none;border-top:none;font-family:inherit;text-align:center;}
 .tab.active{color:#fff;border-bottom-color:#fff;font-weight:700;}
 
 .tab-spacer{height:1px;}
 .main{flex:1;padding:16px;max-width:680px;margin:0 auto;width:100%;background:var(–bg);}
-/* 헤더~탭 사이 완전 불투명 배경 (가상요소로 채우기) */
 
 /* 정보 팝업 */
 .info-btn:hover{background:rgba(255,255,255,0.35);}
@@ -122,6 +124,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .mission-btn.sel-daily{background:#ff8c00;border-color:#ff6b00;color:#fff;font-weight:700;box-shadow:0 3px 10px rgba(255,107,0,0.4);}
 .mission-btn.sel-kanbu{background:#7c3aed;border-color:#6d28d9;color:#fff;font-weight:700;box-shadow:0 3px 10px rgba(124,58,237,0.4);}
 .mission-btn.sel-mundam{background:#ca8a04;border-color:#a16207;color:#fff;font-weight:700;box-shadow:0 3px 10px rgba(202,138,4,0.4);}
+.mission-btn.sel-cheer{background:#1a9e6e;border-color:#0d7a52;color:#fff;font-weight:700;box-shadow:0 3px 10px rgba(26,158,110,0.4);}
 .point-hint{font-size:11px;color:var(–muted);margin-bottom:14px;padding:8px 12px;background:var(–surface2);border-radius:8px;line-height:1.6;white-space:pre-line;}
 #photo-preview{width:100%;max-height:200px;object-fit:cover;border-radius:10px;margin-bottom:12px;display:none;}
 .write-box textarea{width:100%;background:var(–surface2);border:1.5px solid var(–border);border-radius:10px;padding:12px;font-size:14px;color:var(–text);font-family:inherit;resize:none;outline:none;margin-bottom:12px;transition:border-color .2s;min-height:80px;}
@@ -245,6 +248,8 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .cal-day .mission-ok{font-size:7px;color:#b85c10;line-height:1;}
 .cal-day .hearts{display:flex;flex-direction:row;gap:1px;line-height:1;}
 .cal-day .kanbu-heart{font-size:10px;line-height:1;}
+.cal-day.has-event{background:#e8f4fd;border-color:#3b82f6;}
+.cal-event-label{font-size:6px;color:#1d4ed8;line-height:1;font-weight:700;text-align:center;}
 .cal-legend{display:flex;gap:14px;margin-top:8px;font-size:11px;color:var(–muted);}
 .leg-dot{width:10px;height:10px;border-radius:3px;display:inline-block;margin-right:3px;vertical-align:middle;}
 .my-type-bar{margin-bottom:12px;}
@@ -306,6 +311,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 
 <div id="app">
+<div class="fixed-top" id="fixed-top">
 <div class="header">
 <div>
 <div class="header-title">2026 인텐시브 케어 프로그램</div>
@@ -318,6 +324,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 </div>
 
+```
 <div class="progress-banner">
 <div class="progress-info">
 <span class="progress-label" id="prog-label"></span>
@@ -333,8 +340,11 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <button class="tab" onclick="switchTab('mypage',this)">👤 마이페이지</button>
 <button class="tab hidden" id="admin-tab" onclick="switchTab('admin',this)">⚙️ 관리자</button>
 </div>
+```
 
-<div class="main">
+</div>
+
+<div class="main" id="main-content">
 
 ```
 <!-- 피드 탭 -->
@@ -614,7 +624,7 @@ appId: "1:706086992906:web:3eb84a218c245580e2f3f3"
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const CHALLENGE_START = new Date('2026-04-08');
+const CHALLENGE_START = new Date('2026-05-13');
 const TOTAL_DAYS = 56;
 const DAILY_MAX=33, KANBU_MAX=8, MUNDAM_MAX=8, PTS=2, MUNDAM_PTS=1;
 const MAX_PTS = DAILY_MAX*PTS + KANBU_MAX*PTS + MUNDAM_MAX*MUNDAM_PTS; // 66+16+8=90
@@ -691,7 +701,6 @@ const MEMBERS = {
 '우재원': '181888',
 '신동재': '230984',
 '이원경': '122603',
-'조용재': '111111',
 };
 
 window.login=function(){
@@ -779,6 +788,12 @@ const pct=Math.round(day/TOTAL_DAYS*100);
 document.getElementById('prog-label').textContent=Math.ceil(day/7)+'주차 진행 중';
 document.getElementById('prog-days').textContent=day+' / '+TOTAL_DAYS+'일';
 document.getElementById('prog-fill').style.width=pct+'%';
+// fixed-top 높이 자동 측정 → main padding 적용
+requestAnimationFrame(()=>{
+const ft=document.getElementById('fixed-top');
+const mc=document.getElementById('main-content');
+if(ft&&mc) mc.style.paddingTop=ft.offsetHeight+'px';
+});
 }
 
 window.switchTab=function(name,el){
@@ -860,11 +875,12 @@ if(m==='mundam'&&!isMundamActive()){
 toast('문답은 금요일 오전 9시 ~ 일요일 오후 6시에만 열려요!');
 return;
 }
-document.querySelectorAll('.mission-btn').forEach(b=>b.classList.remove('sel-daily','sel-kanbu','sel-mundam'));
+document.querySelectorAll('.mission-btn').forEach(b=>b.classList.remove('sel-daily','sel-kanbu','sel-mundam','sel-cheer'));
 curMission=m;
 if(m==='daily') btn.classList.add('sel-daily');
 else if(m==='kanbu') btn.classList.add('sel-kanbu');
 else if(m==='mundam') btn.classList.add('sel-mundam');
+else if(m==='cheer') btn.classList.add('sel-cheer');
 if(m==='mundam'){
 const wk=getCurrentWeek();
 MI.mundam.hint='💬 다이어트 문답 · 1회당 1점 · 주 1회 (최대 8점)\n\n📝 이번 주 주제:\n'+MUNDAM_TOPICS[wk-1];
@@ -873,8 +889,8 @@ document.getElementById('point-hint').textContent=MI[m]?.hint||'';
 };
 
 window.submitPost=async function(){
-// 문답은 사진 불필요
-if(curMission!=='mundam'&&!curPhoto){toast('사진을 꼭 추가해주세요! 📷');return;}
+// 문답/응원은 사진 불필요
+if(curMission!=='mundam'&&curMission!=='cheer'&&!curPhoto){toast('사진을 꼭 추가해주세요! 📷');return;}
 if(curMission==='mundam'&&!isMundamActive()){toast('문답 시간이 아니에요!');return;}
 const text=document.getElementById('post-text').value.trim();
 if(curMission==='mundam'&&!text){toast('문답 내용을 입력해주세요!');return;}
@@ -1115,8 +1131,8 @@ if(p.m==='mundam') mundamByDate[ds]=true;
 
 // 현재 표시 월 (첫 진입 시만 초기화)
 if(window._calMonth===undefined||window._calMonth===null){
-window._calMonth=today.getMonth();
-window._calYear=today.getFullYear();
+window._calMonth=4; // 5월 (0-indexed)
+window._calYear=2026;
 }
 
 window.calPrev=function(){
@@ -1130,8 +1146,13 @@ if(window._calMonth>11){window._calMonth=0;window._calYear++;}
 renderMypage();
 };
 
-const CAL_START=new Date('2026-04-08');
-const CAL_END=new Date('2026-07-02');
+const CAL_START=new Date('2026-05-13');
+const CAL_END=new Date('2026-07-01');
+const EVENTS={
+'2026-05-13':'🚩발대식',
+'2026-06-09':'📊중간',
+'2026-07-01':'🏆최종',
+};
 const DOWS=['일','월','화','수','목','금','토'];
 const year=window._calYear, month=window._calMonth;
 const monthName=(month+1)+'월';
@@ -1158,16 +1179,22 @@ const inRange=dt>=CAL_START&&dt<=CAL_END;
 const hasDaily=!!dailyByDate[ds];
 const hasKanbu=!!kanbuByDate[ds];
 const hasMundam=!!mundamByDate[ds];
+// 이벤트 키 (yyyy-mm-dd)
+const evKey=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+const evLabel=EVENTS[evKey]||'';
 let cls='';
 if(!inRange) cls='out-range';
 else if(hasDaily) cls='has-daily';
 if(isToday) cls+=' today';
+if(evLabel) cls+=' has-event';
 let inner=`<span>${d}</span>`;
-if(hasDaily) inner+=`<span class="mission-ok">미션!</span>`;
+if(evLabel) inner+=`<span class="cal-event-label">${evLabel}</span>`;
+else if(hasDaily) inner+=`<span class="mission-ok">미션!</span>`;
 const hearts=(hasKanbu?`<span class="kanbu-heart">💜</span>`:'')+
 (hasMundam?`<span class="kanbu-heart">💛</span>`:'');
 if(hearts) inner+=`<span class="hearts">${hearts}</span>`;
 calHtml+=`<div class="cal-day ${cls}">${inner}</div>`;
+}
 }
 calHtml+=`</div>`;
 calHtml+=`<div class="cal-legend">
