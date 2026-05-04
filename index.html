@@ -15,7 +15,7 @@
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-serif;min-height:100vh;overflow-x:hidden;}
-#app{display:flex;flex-direction:column;min-height:100vh;padding-top:142px;background:var(--bg);}
+#app{display:flex;flex-direction:column;min-height:100vh;background:var(--bg);}
 
 /* ── 로그인 ── */
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -35,7 +35,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 #app{display:none;flex-direction:column;min-height:100vh;}
 
 /* 고정 헤더 전체를 하나의 컨테이너로 */
-.fixed-top{position:fixed;top:0;left:0;right:0;z-index:300;background:#146a47;}
+.fixed-top{display:none;position:fixed;top:0;left:0;right:0;z-index:300;background:#146a47;}
 
 /* 헤더 */
 .header{background:#146a47;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;}
@@ -310,7 +310,6 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 </div>
 
-<div id="app">
 <div class="fixed-top" id="fixed-top">
 <div class="header">
 <div>
@@ -323,8 +322,6 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <button class="btn-logout" onclick="logout()">로그아웃</button>
 </div>
 </div>
-
-```
 <div class="progress-banner">
 <div class="progress-info">
 <span class="progress-label" id="prog-label"></span>
@@ -332,7 +329,6 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog-fill"></div></div>
 </div>
-
 <div class="tabs">
 <button class="tab active" onclick="switchTab('feed',this)">🏠 피드</button>
 <button class="tab" onclick="switchTab('cert',this)">✍️ 인증</button>
@@ -340,10 +336,9 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <button class="tab" onclick="switchTab('mypage',this)">👤 마이페이지</button>
 <button class="tab hidden" id="admin-tab" onclick="switchTab('admin',this)">⚙️ 관리자</button>
 </div>
-```
-
 </div>
 
+<div id="app">
 <div class="main" id="main-content">
 
 ```
@@ -651,7 +646,7 @@ hint:'🤝 깐부 미션 🩷 : 각각 개별로 올려야 깐부 미션 인증�
 mundam:{emoji:'💬',text:'다이어트 문답',cls:'badge-mundam',pts:MUNDAM_PTS,
 hint:''}, // hint는 동적으로 설정
 cheer:{emoji:'📣',text:'응원',cls:'badge-cheer',pts:0,
-hint:'📣 응원 한마디 · 동료를 응원해요! (포인트 없음) 사진없이도 업로드 가능'}
+hint:'📣 응원 한마디 · 동료를 응원해요! (포인트 없음)'}
 };
 
 let user=null, isAdmin=false, curMission='daily', curPhoto=null;
@@ -719,6 +714,7 @@ else if(pw!==null)toast('비밀번호가 틀렸어요!');
 };
 function go(){
 document.getElementById('login-screen').style.display='none';
+document.getElementById('fixed-top').style.display='block';
 document.getElementById('app').style.display='flex';
 document.getElementById('user-badge').textContent=user;
 if(isAdmin)document.getElementById('admin-tab').classList.remove('hidden');
@@ -735,6 +731,7 @@ user=null;isAdmin=false;curPhoto=null;allPosts=[];
 localStorage.removeItem('diet_user');
 localStorage.removeItem('diet_admin');
 document.getElementById('login-screen').style.display='';
+document.getElementById('fixed-top').style.display='none';
 document.getElementById('app').style.display='none';
 document.getElementById('name-input').value='';
 document.getElementById('empno-input').value='';
@@ -751,6 +748,7 @@ if(savedUser){
 user=savedUser;
 isAdmin=savedAdmin==='1';
 document.getElementById('login-screen').style.display='none';
+document.getElementById('fixed-top').style.display='block';
 document.getElementById('app').style.display='flex';
 document.getElementById('user-badge').textContent=user;
 if(isAdmin)document.getElementById('admin-tab').classList.remove('hidden');
@@ -881,6 +879,14 @@ if(m==='daily') btn.classList.add('sel-daily');
 else if(m==='kanbu') btn.classList.add('sel-kanbu');
 else if(m==='mundam') btn.classList.add('sel-mundam');
 else if(m==='cheer') btn.classList.add('sel-cheer');
+const placeholders={
+daily:'오늘의 인증을 남겨보세요! 💪',
+kanbu:'깐부와 함께한 활동을 남겨보세요! 🤝',
+mundam:'여러분의 생각을 공유해주세요. (사진 없어도 업로드 가능합니다.)',
+cheer:'동료들을 위한 응원 한마디를 남겨주세요. 🍀 (사진 없어도 업로드 가능합니다.)',
+};
+const ta=document.getElementById('post-text');
+if(ta) ta.placeholder=placeholders[m]||'오늘의 인증을 남겨보세요! 💪';
 if(m==='mundam'){
 const wk=getCurrentWeek();
 MI.mundam.hint='💬 다이어트 문답 · 1회당 1점 · 주 1회 (최대 8점)\n\n📝 이번 주 주제:\n'+MUNDAM_TOPICS[wk-1];
