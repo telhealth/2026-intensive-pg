@@ -343,13 +343,14 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <div id="app">
 <div class="main" id="main-content">
 
-```
 <!-- 피드 탭 -->
+
 <div id="tab-feed">
 <div class="feed" id="feed-list"><div class="loading">🌿 불러오는 중...</div></div>
 </div>
 
 <!-- 인증 탭 -->
+
 <div id="tab-cert" class="hidden">
 <div class="write-box">
 <h3>✍️ 오늘의 인증</h3>
@@ -375,18 +376,16 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 
 <!-- 랭킹 탭 -->
+
 <div id="tab-ranking" class="hidden">
-<!-- 이번 주 인증왕 -->
 <div class="rank-section">
 <div class="rank-section-title">🏅 이번 주 인증왕</div>
 <div id="week-cert-podium"></div>
 </div>
-<!-- 이번 주 공감왕 -->
 <div class="rank-section">
 <div class="rank-section-title">💝 이번 주 공감왕</div>
 <div id="week-react-podium"></div>
 </div>
-<!-- 누적 랭킹 -->
 <div class="rank-section">
 <div class="rank-section-title">📊 누적 인증 랭킹 <span style="font-size:11px;color:var(--muted);font-weight:400">2026.05.12 ~ 현재</span></div>
 <div class="rank-list" id="rank-list"></div>
@@ -394,6 +393,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 
 <!-- 마이페이지 탭 -->
+
 <div id="tab-mypage" class="hidden">
 <div class="my-profile-card">
 <div class="my-avatar-big" id="my-avatar-big"></div>
@@ -449,6 +449,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 
 <!-- 관리자 탭 -->
+
 <div id="tab-admin" class="hidden">
 <div class="admin-panel">
 <h3>⚙️ 관리자 페이지</h3>
@@ -459,7 +460,6 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <div class="stat-card"><div class="num" id="stat-today">0</div><div class="label">오늘 인증</div></div>
 </div>
 
-<!-- 공지 팝업 관리 -->
 <div class="pts-grant-box" style="margin-bottom:16px;">
 <h4>📢 로그인 공지 팝업 관리</h4>
 <input type="text" id="notice-title" class="pts-memo" placeholder="제목 입력" style="margin-bottom:8px;">
@@ -478,7 +478,6 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <button class="btn-grant" style="background:#aaa;" onclick="deleteNotice()">공지 삭제</button>
 </div>
 
-<!-- 포인트 지급 -->
 <div class="pts-grant-box">
 <h4>🎁 포인트 지급</h4>
 <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">대상자 (복수 선택 가능)</div>
@@ -497,20 +496,19 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <button class="btn-grant" onclick="grantPoints()">포인트 지급하기 🎁</button>
 </div>
 
-<!-- 지급 이력 -->
 <div class="pts-history-box">
 <h4>📋 포인트 지급 이력</h4>
 <div id="grant-history-list"><p style="font-size:13px;color:var(--muted)">아직 지급 이력이 없어요.</p></div>
 </div>
 
 <button class="btn-excel" onclick="dlExcel()" style="margin-top:16px">📥 엑셀 다운로드</button>
+
 <table class="admin-table">
 <thead><tr><th>#</th><th>이름</th><th>미션</th><th>내용</th><th>사진</th><th>일시</th><th>포인트</th></tr></thead>
 <tbody id="admin-tbody"></tbody>
 </table>
 </div>
 </div>
-```
 
 </div>
 
@@ -526,7 +524,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <span class="lightbox-close">✕</span>
 <img id="lightbox-img" src="" alt="">
 </div>
-<!-- 공지 팝업 -->
+
 <div class="notice-modal" id="notice-modal">
 <div class="notice-modal-box">
 <div class="notice-modal-title" id="notice-modal-title"></div>
@@ -535,14 +533,11 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 </div>
 
-<!-- 정보 팝업 -->
-
 <div class="info-modal" id="info-modal" onclick="if(event.target===this)closeInfo()">
 <div class="info-modal-box">
 <h3>🌿 2026 인텐시브 케어 프로그램</h3>
 <p class="info-sub">2026.05.13 ~ 2026.07.02 · TEK SHE HEALTH</p>
 
-```
 <div class="info-section">
 <h4>✅ 다이어트 최소 성공 기준</h4>
 <div class="info-row"><span>몸무게 5% 감량</span><span>발대식 측정값 기준</span></div>
@@ -565,7 +560,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <span>🤝 깐부 인증</span>
 <span class="info-mission-pts">최대 16점</span>
 </div>
-<div class="info-mission-desc">1회 2점 · 매주 1회 · 8주 (1주차~8주차)<br>💜 파트너와 함께했음을 각각 개별 업로드</div>
+<div class="info-mission-desc">1회 2점 · 매주 1회 (월~일 기준) · 8주<br>💜 파트너와 함께했음을 각각 개별 업로드</div>
 </div>
 
 <div class="info-mission-item">
@@ -573,7 +568,7 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <span>💬 다이어트 문답</span>
 <span class="info-mission-pts">최대 8점</span>
 </div>
-<div class="info-mission-desc">1회 1점 · 매주 1회 · 8주<br>💛 매주 금요일 09:00 ~ 일요일 18:00 오픈</div>
+<div class="info-mission-desc">1회 1점 · 매주 1회 (월~일 기준) · 8주<br>💛 매주 금요일 09:00 ~ 일요일 18:00 오픈</div>
 </div>
 
 <div class="info-mission-item" style="border-top:1px dashed var(--border);padding-top:10px;margin-top:4px;">
@@ -599,7 +594,6 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 </div>
 
 <button class="info-close" onclick="closeInfo()">확인</button>
-```
 
 </div>
 </div>
@@ -624,9 +618,8 @@ const db = getFirestore(app);
 const CHALLENGE_START = new Date('2026-05-13');
 const TOTAL_DAYS = 56;
 const DAILY_MAX=33, KANBU_MAX=8, MUNDAM_MAX=8, PTS=2, MUNDAM_PTS=1;
-const MAX_PTS = DAILY_MAX*PTS + KANBU_MAX*PTS + MUNDAM_MAX*MUNDAM_PTS; // 66+16+8=90
+const MAX_PTS = DAILY_MAX*PTS + KANBU_MAX*PTS + MUNDAM_MAX*MUNDAM_PTS;
 
-// 주차별 문답 주제
 const MUNDAM_TOPICS = [
 '1주차: 리브레 사용후기 작성 (사진 X)',
 '2주차: 향후 혈당 관리를 위해 내가 꼭 지킬 1가지는?',
@@ -644,9 +637,9 @@ const MI = {
 daily:{emoji:'📋',text:'데일리 미션',cls:'badge-daily',pts:PTS,
 hint:'주차별 주제에 맞는 인증사진을 올려주세요. 📸\n(일 1회 인증 필수 · 1회당 2점 · 최대 66점)'},
 kanbu:{emoji:'🤝',text:'깐부 미션',cls:'badge-kanbu',pts:PTS,
-hint:'🤝 깐부 미션 🩷 : 각각 개별로 올려야 깐부 미션 인증으로 내 점수가 인정됩니다.\n1회당 2점 · 주 1회 · 총 8주 (최대 16점)'},
+hint:'🤝 깐부 미션 🩷 : 각각 개별로 올려야 깐부 미션 인증으로 내 점수가 인정됩니다.\n1회당 2점 · 주 1회 (월~일 기준) · 총 8주 (최대 16점)'},
 mundam:{emoji:'💬',text:'다이어트 문답',cls:'badge-mundam',pts:MUNDAM_PTS,
-hint:''}, // hint는 동적으로 설정
+hint:''},
 cheer:{emoji:'📣',text:'응원',cls:'badge-cheer',pts:0,
 hint:'📣 응원 한마디 · 동료를 응원해요! (포인트 없음)'}
 };
@@ -670,7 +663,6 @@ r.readAsDataURL(file);
 });
 }
 
-// ── 참가자 명단 (이름: 사번) ──
 const MEMBERS = {
 '오소영': '242453',
 '김다슬': '231005',
@@ -721,11 +713,9 @@ document.getElementById('fixed-top').style.display='block';
 document.getElementById('app').style.display='flex';
 document.getElementById('user-badge').textContent=user;
 if(isAdmin)document.getElementById('admin-tab').classList.remove('hidden');
-// 로그인 유지 저장
 localStorage.setItem('diet_user', user);
 localStorage.setItem('diet_admin', isAdmin?'1':'0');
 updateProg();startListen();
-// 공지 체크 (관리자는 제외)
 if(!isAdmin) setTimeout(()=>checkNotice(), 1000);
 }
 window.logout=function(){
@@ -743,7 +733,6 @@ document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i==
 ['feed','cert','ranking','mypage','admin'].forEach((t,i)=>document.getElementById('tab-'+t).classList.toggle('hidden',i!==0));
 };
 
-// 새로고침 시 로그인 복원
 (function restoreSession(){
 const savedUser=localStorage.getItem('diet_user');
 const savedAdmin=localStorage.getItem('diet_admin');
@@ -756,7 +745,6 @@ document.getElementById('app').style.display='flex';
 document.getElementById('user-badge').textContent=user;
 if(isAdmin)document.getElementById('admin-tab').classList.remove('hidden');
 updateProg();
-// Firebase 준비 후 데이터 로드
 setTimeout(()=>startListen(), 100);
 }
 })();
@@ -789,7 +777,6 @@ const pct=Math.round(day/TOTAL_DAYS*100);
 document.getElementById('prog-label').textContent=Math.ceil(day/7)+'주차 진행 중';
 document.getElementById('prog-days').textContent=day+' / '+TOTAL_DAYS+'일';
 document.getElementById('prog-fill').style.width=pct+'%';
-// fixed-top 높이 자동 측정 → main padding 적용
 requestAnimationFrame(()=>{
 const ft=document.getElementById('fixed-top');
 const mc=document.getElementById('main-content');
@@ -812,10 +799,22 @@ function getPostDate(p){
 if(!p.time)return null;
 return new Date(p.time.toMillis?p.time.toMillis():p.time);
 }
+
+// ★★★ 핵심 수정: 월~일 기준 주차 키 (YYYY-MM-DD of Monday) ★★★
+// 해당 날짜가 속한 주의 월요일 날짜 문자열을 반환 → 같은 월요일이면 같은 주
+function getWeekKey(date){
+const d=new Date(date.getFullYear(),date.getMonth(),date.getDate()); // 시간 제거
+const day=d.getDay(); // 0(일)~6(토)
+const diff=day===0?-6:1-day; // 월요일까지 이동
+d.setDate(d.getDate()+diff);
+return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+// 챌린지 시작일 기준 주차 번호 (UI 표시용 - 문답 주제 인덱스 등에 사용)
 function getWeekNum(date){
-// 챌린지 시작일 기준 주차 계산 (1주차=1)
 return Math.ceil((Math.floor((date-CHALLENGE_START)/86400000)+1)/7);
 }
+
 function calcEarnedPts(mine){
 // 데일리: 날짜별 최초 1회만
 const dailyDays=new Set();
@@ -825,19 +824,19 @@ dailyDays.add(d.toDateString());
 });
 const dailyPts=dailyDays.size*PTS;
 
-// 깐부: 1주차부터, 주차별 최초 1회만
+// 깐부: 월~일 주차별 최초 1회만
 const kanbuWeeks=new Set();
 mine.filter(p=>p.m==='kanbu').forEach(p=>{
 const d=getPostDate(p);if(!d)return;
-kanbuWeeks.add(getWeekNum(d));
+kanbuWeeks.add(getWeekKey(d));
 });
 const kanbuPts=kanbuWeeks.size*PTS;
 
-// 문답: 주차별 최초 1회만
+// 문답: 월~일 주차별 최초 1회만
 const mundamWeeks=new Set();
 mine.filter(p=>p.m==='mundam').forEach(p=>{
 const d=getPostDate(p);if(!d)return;
-mundamWeeks.add(getWeekNum(d));
+mundamWeeks.add(getWeekKey(d));
 });
 const mundamPts=mundamWeeks.size*MUNDAM_PTS;
 
@@ -854,12 +853,10 @@ document.getElementById('photo-status').textContent='✓ 추가됨';
 toast('사진 추가 완료! ✅');
 };
 
-// 현재 주차
 function getCurrentWeek(){
 const diff=Math.floor((Date.now()-CHALLENGE_START)/86400000);
 return Math.min(Math.max(Math.ceil((diff+1)/7),1),8);
 }
-// 문답 활성화 여부 (금 09:00 ~ 일 18:00)
 function isMundamActive(){
 const now=new Date();
 const day=now.getDay();
@@ -892,29 +889,41 @@ const ta=document.getElementById('post-text');
 if(ta) ta.placeholder=placeholders[m]||'오늘의 인증을 남겨보세요! 💪';
 if(m==='mundam'){
 const wk=getCurrentWeek();
-MI.mundam.hint='💬 다이어트 문답 · 1회당 1점 · 주 1회 (최대 8점)\n\n📝 이번 주 주제:\n'+MUNDAM_TOPICS[wk-1];
+MI.mundam.hint='💬 다이어트 문답 · 1회당 1점 · 주 1회 (월~일 기준 · 최대 8점)\n\n📝 이번 주 주제:\n'+MUNDAM_TOPICS[wk-1];
 }
 document.getElementById('point-hint').textContent=MI[m]?.hint||'';
 };
 
 window.submitPost=async function(){
-// 문답/응원은 사진 불필요
 if(curMission!=='mundam'&&curMission!=='cheer'&&!curPhoto){toast('사진을 꼭 추가해주세요! 📷');return;}
 if(curMission==='mundam'&&!isMundamActive()){toast('문답 시간이 아니에요!');return;}
 const text=document.getElementById('post-text').value.trim();
 if(curMission==='mundam'&&!text){toast('문답 내용을 입력해주세요!');return;}
 const mine=allPosts.filter(p=>p.author===user);
 if(curMission==='daily'&&mine.filter(p=>p.m==='daily').length>=DAILY_MAX){toast('데일리 미션은 최대 33회!');return;}
+
+// ★★★ 깐부: 월~일 주차 기준으로 변경 ★★★
 if(curMission==='kanbu'){
-const wk=getCurrentWeek();
-const thisWeekKanbu=mine.filter(p=>p.m==='kanbu'&&getWeekNum(getPostDate(p))===wk);
-if(thisWeekKanbu.length>=1){toast('깐부 미션은 주 1회만 점수 인정돼요!');return;}
+const thisWeekKey=getWeekKey(new Date());
+const thisWeekKanbu=mine.filter(p=>{
+if(p.m!=='kanbu')return false;
+const d=getPostDate(p);if(!d)return false;
+return getWeekKey(d)===thisWeekKey;
+});
+if(thisWeekKanbu.length>=1){toast('깐부 미션은 주 1회만 점수 인정돼요! (월~일 기준)');return;}
 }
+
+// ★★★ 문답: 월~일 주차 기준으로 변경 ★★★
 if(curMission==='mundam'){
-const wk=getCurrentWeek();
-const thisWeekMundam=mine.filter(p=>p.m==='mundam'&&getWeekNum(getPostDate(p))===wk);
-if(thisWeekMundam.length>=1){toast('문답은 주 1회만 점수 인정돼요!');return;}
+const thisWeekKey=getWeekKey(new Date());
+const thisWeekMundam=mine.filter(p=>{
+if(p.m!=='mundam')return false;
+const d=getPostDate(p);if(!d)return false;
+return getWeekKey(d)===thisWeekKey;
+});
+if(thisWeekMundam.length>=1){toast('문답은 주 1회만 점수 인정돼요! (월~일 기준)');return;}
 }
+
 const btn=document.getElementById('btn-post');
 btn.disabled=true;btn.textContent='올리는 중...';
 try{
@@ -946,7 +955,6 @@ const c=document.getElementById('feed-list');
 if(!allPosts.length){c.innerHTML='<div class="empty-state"><div class="emoji">🏃</div><p>아직 인증이 없어요!</p></div>';return;}
 c.innerHTML=allPosts.filter(p=>p.author).map(p=>{
 const mi=MI[p.m]||MI.cheer,color=gc(p.author),reactions=p.reactions||{};
-const liked=(reactions['👍🏻']||[]).includes(user);
 const cmts=(p.comments||[]).map(c=>`
 <div class="comment-item">
 <div class="comment-avatar" style="background:${gc(c.author)}22;color:${gc(c.author)}">${c.author[0]}</div>
@@ -1030,7 +1038,7 @@ return t>=mon;
 function makePodium(items, valueKey, labelFn){
 if(!items.length) return '<div class="empty-state" style="padding:20px"><p>아직 기록이 없어요!</p></div>';
 const top=items.slice(0,3);
-const order=[1,0,2]; // 2등, 1등, 3등 순서로 시각적 배치
+const order=[1,0,2];
 const medals=['🥇','🥈','🥉'];
 const classes=['podium-2nd','podium-1st','podium-3rd'];
 let html='<div class="podium">';
@@ -1052,12 +1060,10 @@ function renderRanking(){
 const weekPosts=getWeekPosts(allPosts).filter(p=>p.author);
 const names=[...new Set(allPosts.filter(p=>p.author).map(p=>p.author))];
 
-// 이번 주 인증왕
 const weekCert=names.map(n=>({name:n,cnt:weekPosts.filter(p=>p.author===n&&p.m!=='cheer').length}))
 .filter(x=>x.cnt>0).sort((a,b)=>b.cnt-a.cnt);
 document.getElementById('week-cert-podium').innerHTML=makePodium(weekCert,'cnt',x=>x.cnt+'회 인증');
 
-// 이번 주 공감왕
 const weekReact=names.map(n=>{
 const total=weekPosts.filter(p=>p.author===n).reduce((s,p)=>{
 const r=p.reactions||{};
@@ -1067,10 +1073,9 @@ return {name:n,cnt:total};
 }).filter(x=>x.cnt>0).sort((a,b)=>b.cnt-a.cnt);
 document.getElementById('week-react-podium').innerHTML=makePodium(weekReact,'cnt',x=>x.cnt+'개 공감');
 
-// 누적 랭킹
 const sorted=names.map(n=>{
 const mine=allPosts.filter(p=>p.author===n);
-const {dailyPts,kanbuPts,dailyDays,kanbuWeeks}=calcEarnedPts(mine);
+const {dailyPts,kanbuPts}=calcEarnedPts(mine);
 return{name:n,pts:dailyPts+kanbuPts,cnt:mine.filter(p=>p.m!=='cheer').length};
 }).sort((a,b)=>b.cnt-a.cnt);
 
@@ -1127,7 +1132,6 @@ document.getElementById('my-daily').textContent=dCnt;
 document.getElementById('my-kanbu').textContent=kCnt;
 if(document.getElementById('my-mundam'))document.getElementById('my-mundam').textContent=mCnt;
 
-// 날짜별 포스트 맵
 const today=new Date(),todayStr=today.toDateString();
 const dailyByDate={}, kanbuByDate={}, mundamByDate={};
 mine.forEach(p=>{
@@ -1138,9 +1142,8 @@ if(p.m==='kanbu') kanbuByDate[ds]=true;
 if(p.m==='mundam') mundamByDate[ds]=true;
 });
 
-// 현재 표시 월 (첫 진입 시만 초기화)
 if(window._calMonth===undefined||window._calMonth===null){
-window._calMonth=4; // 5월 (0-indexed)
+window._calMonth=4;
 window._calYear=2026;
 }
 
@@ -1188,7 +1191,6 @@ const inRange=dt>=CAL_START&&dt<=CAL_END;
 const hasDaily=!!dailyByDate[ds];
 const hasKanbu=!!kanbuByDate[ds];
 const hasMundam=!!mundamByDate[ds];
-// 이벤트 키 (yyyy-mm-dd)
 const evKey=`${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
 const evLabel=EVENTS[evKey]||'';
 let cls='';
@@ -1213,7 +1215,6 @@ calHtml+=`<div class="cal-legend">
 calHtml+=`</div>`;
 document.getElementById('my-cal').innerHTML=calHtml;
 
-// 보너스 포인트 이력
 const bonusBox=document.getElementById('my-bonus-box');
 const bonusList=document.getElementById('my-bonus-list');
 if(myGrants.length>0){
@@ -1244,7 +1245,6 @@ document.getElementById('stat-total').textContent=allPosts.length;
 document.getElementById('stat-members').textContent=members;
 document.getElementById('stat-today').textContent=allPosts.filter(p=>p.time&&new Date(p.time.toMillis?p.time.toMillis():p.time).toDateString()===today).length;
 
-// 참가자 선택박스 업데이트
 const sel=document.getElementById('grant-user');
 const cur=sel.value;
 sel.innerHTML='<option value="">참가자 선택</option>';
@@ -1252,7 +1252,6 @@ Object.keys(MEMBERS).forEach(n=>{
 sel.innerHTML+=`<option value="${esc(n)}" ${cur===n?'selected':''}>${esc(n)}</option>`;
 });
 
-// 포인트 지급 이력
 const histEl=document.getElementById('grant-history-list');
 const grants=allGrants||[];
 if(!grants.length){histEl.innerHTML='<p style="font-size:13px;color:var(--muted)">아직 지급 이력이 없어요.</p>';}
@@ -1280,7 +1279,6 @@ return `<tr><td>${i+1}</td><td>${esc(p.author)}</td><td><span class="post-type-b
 }).join('');
 }
 
-// 포인트 지급
 let allGrants=[];
 let grantsUnsub=null;
 function startGrantListen(){
@@ -1312,13 +1310,11 @@ target,pts,memo,by:user,time:serverTimestamp()
 document.getElementById('grant-pts').value='';
 document.getElementById('grant-memo').value='';
 document.getElementById('grant-memo-select').value='';
-// 선택 해제
 [...sel.options].forEach(o=>o.selected=false);
 toast(`${targets.length}명에게 ${pts}점 지급 완료! 🎁`);
 }catch(e){toast('오류가 발생했어요!');console.error(e);}
 };
 
-// 공지 저장
 window.saveNotice=async function(){
 const title=document.getElementById('notice-title').value.trim();
 const content=document.getElementById('notice-content').value.trim();
@@ -1336,7 +1332,6 @@ toast('공지 등록 완료! 📢');
 }catch(e){toast('오류가 발생했어요!');console.error(e);}
 };
 
-// 공지 삭제 (가장 최근 공지 삭제)
 window.deleteNotice=async function(){
 if(!confirm('현재 공지를 삭제할까요?'))return;
 try{
@@ -1350,7 +1345,6 @@ toast('공지 삭제 완료!');
 }catch(e){toast('오류!');console.error(e);}
 };
 
-// 공지 확인 및 표시
 async function checkNotice(){
 try{
 const {getDocs}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
