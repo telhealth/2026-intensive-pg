@@ -651,14 +651,32 @@ const gc=n=>{if(!n||typeof n!=='string')return COLORS[0];let h=0;for(let c of n)
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
 function compressImage(file){
-return new Promise(resolve=>{
+return new Promise((resolve,reject)=>{
+// HEIC/HEIF 사전 차단 (iOS 기본 포맷, 대부분 브라우저가 디코딩 못함)
+const fname=(file.name||'').toLowerCase();
+const ftype=(file.type||'').toLowerCase();
+if(fname.endsWith('.heic')||fname.endsWith('.heif')||ftype.includes('heic')||ftype.includes('heif')){
+reject(new Error('HEIC'));
+return;
+}
 const canvas=document.createElement('canvas'),img=new Image(),r=new FileReader();
-r.onload=e=>{img.onload=()=>{
+// 타임아웃: 10초 안에 처리 못하면 실패로 간주 (조용히 멈추는 것 방지)
+const timer=setTimeout(()=>reject(new Error('TIMEOUT')),10000);
+r.onerror=()=>{clearTimeout(timer);reject(new Error('READ_FAIL'));};
+r.onload=e=>{
+img.onerror=()=>{clearTimeout(timer);reject(new Error('DECODE_FAIL'));};
+img.onload=()=>{
+clearTimeout(timer);
+try{
 const MAX=800;let w=img.width,h=img.height;
+if(!w||!h){reject(new Error('NO_SIZE'));return;}
 if(w>h){if(w>MAX){h=h*(MAX/w);w=MAX;}}else{if(h>MAX){w=w*(MAX/h);h=MAX;}}
 canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);
 resolve(canvas.toDataURL('image/jpeg',0.6));
-};img.src=e.target.result;};
+}catch(err){reject(err);}
+};
+img.src=e.target.result;
+};
 r.readAsDataURL(file);
 });
 }
@@ -774,7 +792,10 @@ function updateProg(){
 const diff=Math.floor((Date.now()-CHALLENGE_START)/86400000)+1;
 const day=Math.min(Math.max(diff,1),TOTAL_DAYS);
 const pct=Math.round(day/TOTAL_DAYS*100);
-document.getElementById('prog-label').textContent=Math.ceil(day/7)+'주차 진행 중';
+const weekStartKey=getWeekKey(CHALLENGE_START);
+const todayKey=getWeekKey(new Date());
+const weekNum=Math.round((new Date(todayKey)-new Date(weekStartKey))/(7*86400000))+1;
+document.getElementById('prog-label').textContent=weekNum+'주차 진행 중';
 document.getElementById('prog-days').textContent=day+' / '+TOTAL_DAYS+'일';
 document.getElementById('prog-fill').style.width=pct+'%';
 requestAnimationFrame(()=>{
@@ -854,8 +875,10 @@ toast('사진 추가 완료! ✅');
 };
 
 function getCurrentWeek(){
-const diff=Math.floor((Date.now()-CHALLENGE_START)/86400000);
-return Math.min(Math.max(Math.ceil((diff+1)/7),1),8);
+const weekStartKey=getWeekKey(CHALLENGE_START);
+const todayKey=getWeekKey(new Date());
+const wk=Math.round((new Date(todayKey)-new Date(weekStartKey))/(7*86400000))+1;
+return Math.min(Math.max(wk,1),8);
 }
 function isMundamActive(){
 const now=new Date();
@@ -950,11 +973,39 @@ const h=Math.floor(m/60);if(h<24)return h+'시간 전';
 return Math.floor(h/24)+'일 전';
 }
 
+// ★ 점수 인정된 포스트 ID 집합 계산
+// 데일리: 작성자+날짜별 최초 1개만, 깐부/문답: 작성자+주차별 최초 1개만
+function getScoredPostIds(){
+const scored=new Set();
+const sortedAsc=[...allPosts].filter(p=>p.author&&p.time).sort((a,b)=>{
+const ta=a.time.toMillis?a.time.toMillis():new Date(a.time).getTime();
+const tb=b.time.toMillis?b.time.toMillis():new Date(b.time).getTime();
+return ta-tb; // 오래된 순 (먼저 올린 게 점수 인정)
+});
+const seen={daily:new Set(),kanbu:new Set(),mundam:new Set()};
+sortedAsc.forEach(p=>{
+const d=getPostDate(p);if(!d)return;
+let key=null;
+if(p.m==='daily') key=p.author+'|'+d.toDateString();
+else if(p.m==='kanbu') key=p.author+'|'+getWeekKey(d);
+else if(p.m==='mundam') key=p.author+'|'+getWeekKey(d);
+else return; // cheer는 점수 없음
+if(key&&!seen[p.m].has(key)){
+seen[p.m].add(key);
+scored.add(p.id);
+}
+});
+return scored;
+}
+
 function renderFeed(){
 const c=document.getElementById('feed-list');
 if(!allPosts.length){c.innerHTML='<div class="empty-state"><div class="emoji">🏃</div><p>아직 인증이 없어요!</p></div>';return;}
+const scoredIds=getScoredPostIds();
 c.innerHTML=allPosts.filter(p=>p.author).map(p=>{
 const mi=MI[p.m]||MI.cheer,color=gc(p.author),reactions=p.reactions||{};
+const isScored=scoredIds.has(p.id);
+const showPts=p.pts>0&&isScored;
 const cmts=(p.comments||[]).map(c=>`
 <div class="comment-item">
 <div class="comment-avatar" style="background:${gc(c.author)}22;color:${gc(c.author)}">${c.author[0]}</div>
@@ -975,7 +1026,7 @@ ${p.text?`<div class="post-text">${esc(p.text)}</div>`:''}
 <div class="post-footer">
 ${emojiRow}
 <button class="comment-toggle" onclick="toggleCmt('cmt-${p.id}')">💬 ${(p.comments||[]).length}</button>
-${p.pts>0?`<span class="post-pts">+${p.pts}pt</span>`:''}
+${showPts?`<span class="post-pts">+${p.pts}pt</span>`:''}
 ${p.author===user?`<button class="btn-delete-post" onclick="deletePost('${p.id}')">🗑️</button>`:''}
 </div>
 <div class="comments hidden" id="cmt-${p.id}">
@@ -1269,13 +1320,18 @@ return `<div class="pts-history-item">
 
 const tbody=document.getElementById('admin-tbody');
 if(!allPosts.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">인증 기록이 없습니다</td></tr>';return;}
+const scoredIds=getScoredPostIds();
 tbody.innerHTML=allPosts.map((p,i)=>{
 const mi=MI[p.m]||MI.cheer;
 const dt=p.time?new Date(p.time.toMillis?p.time.toMillis():p.time):new Date();
 const ds=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
+const actualPts=scoredIds.has(p.id)?(p.pts||0):0;
+const ptsCell=actualPts>0
+?`<span style="color:var(--green);font-weight:700">${actualPts}pt</span>`
+:`<span style="color:#aaa;font-size:11px">중복(0pt)</span>`;
 return `<tr><td>${i+1}</td><td>${esc(p.author)}</td><td><span class="post-type-badge ${mi.cls}">${mi.text}</span></td>
 <td style="max-width:120px;overflow:hidden;text-overflow:ellipsis">${esc(p.text||'-')}</td>
-<td>${p.photo?'✅':'-'}</td><td>${ds}</td><td style="color:var(--green);font-weight:700">${p.pts||0}pt</td></tr>`;
+<td>${p.photo?'✅':'-'}</td><td>${ds}</td><td>${ptsCell}</td></tr>`;
 }).join('');
 }
 
@@ -1362,13 +1418,16 @@ document.getElementById('notice-modal').classList.add('show');
 }
 
 window.dlExcel=function(){
-let csv='\uFEFF순번,이름,사번,미션유형,내용,사진,일시,포인트\n';
+let csv='\uFEFF순번,이름,사번,미션유형,내용,사진,일시,포인트,점수인정\n';
+const scoredIdsCsv=getScoredPostIds();
 allPosts.forEach((p,i)=>{
 const mi=MI[p.m]||MI.cheer;
 const dt=p.time?new Date(p.time.toMillis?p.time.toMillis():p.time):new Date();
 const ds=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}`;
 const empno=MEMBERS[p.author]||'-';
-csv+=`${i+1},"${p.author}","${empno}","${mi.text}","${(p.text||'').replace(/"/g,'""')}","${p.photo?'있음':'없음'}","${ds}",${p.pts||0}\n`;
+const isScored=scoredIdsCsv.has(p.id);
+const actualPts=isScored?(p.pts||0):0;
+csv+=`${i+1},"${p.author}","${empno}","${mi.text}","${(p.text||'').replace(/"/g,'""')}","${p.photo?'있음':'없음'}","${ds}",${actualPts},"${isScored?'인정':'중복'}"\n`;
 });
 const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
 const url=URL.createObjectURL(blob);
