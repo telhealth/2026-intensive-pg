@@ -158,6 +158,9 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 .emoji-btn.reacted{border-color:var(–orange);background:#e8832a15;}
 .emoji-btn span{font-size:11px;color:var(–muted);font-weight:600;}
 .post-pts{margin-left:auto;font-size:12px;font-weight:700;color:var(–green);}
+.comments-preview{padding-top:10px;border-top:1px solid var(–border);margin-top:10px;}
+.more-cmts-btn{background:none;border:none;color:var(–muted);font-size:12px;font-weight:600;cursor:pointer;padding:0 0 8px;font-family:inherit;}
+.more-cmts-btn:hover{color:var(–accent);}
 .comment-toggle{background:none;border:none;cursor:pointer;font-size:13px;color:var(–muted);padding:4px 8px;border-radius:6px;font-family:inherit;}
 .comments{margin-top:10px;border-top:1px solid var(–border);padding-top:10px;}
 .comment-input-row{display:flex;gap:8px;margin-bottom:8px;}
@@ -1027,11 +1030,16 @@ c.innerHTML=allPosts.filter(p=>p.author).map(p=>{
 const mi=MI[p.m]||MI.cheer,color=gc(p.author),reactions=p.reactions||{};
 const isScored=scoredIds.has(p.id);
 const showPts=p.pts>0&&isScored;
-const cmts=(p.comments||[]).map(c=>`
+const allCmts=p.comments||[];
+const previewCmts=allCmts.slice(-3); // 최신 3개만 미리 표시
+const hasMore=allCmts.length>3;
+const renderCmt=c=>`
 <div class="comment-item">
 <div class="comment-avatar" style="background:${gc(c.author)}22;color:${gc(c.author)}">${c.author[0]}</div>
 <div class="comment-body"><div class="comment-name">${esc(c.author)}</div><div class="comment-text">${esc(c.text)}</div></div>
-</div>`).join('');
+</div>`;
+const previewHtml=previewCmts.map(renderCmt).join('');
+const allHtml=allCmts.map(renderCmt).join('');
 const emojiRow=EMOJIS.map(e=>{
 const cnt=(reactions[e]||[]).length,reacted=(reactions[e]||[]).includes(user);
 return `<button class="emoji-btn ${reacted?'reacted':''}" onclick="toggleReaction('${p.id}','${e}')">${e}<span>${cnt>0?cnt:''}</span></button>`;
@@ -1046,12 +1054,17 @@ ${p.photo?`<img class="post-img" src="${p.photo}" alt="인증사진" onclick="op
 ${p.text?`<div class="post-text">${esc(p.text)}</div>`:''}
 <div class="post-footer">
 ${emojiRow}
-<button class="comment-toggle" onclick="toggleCmt('cmt-${p.id}')">💬 ${(p.comments||[]).length}</button>
+<button class="comment-toggle" onclick="toggleCmt('cmt-${p.id}')">💬 ${allCmts.length}</button>
 ${showPts?`<span class="post-pts">+${p.pts}pt</span>`:''}
 ${p.author===user?`<button class="btn-delete-post" onclick="deletePost('${p.id}')">🗑️</button>`:''}
 </div>
+${allCmts.length>0?`
+<div class="comments-preview" id="prev-${p.id}">
+${hasMore?`<button class="more-cmts-btn" onclick="expandCmts('${p.id}',\`${encodeURIComponent(allHtml)}\`)">댓글 ${allCmts.length-3}개 더 보기</button>`:''}
+<div>${previewHtml}</div>
+</div>`:''}
 <div class="comments hidden" id="cmt-${p.id}">
-<div>${cmts}</div>
+<div id="cmt-all-${p.id}">${allHtml}</div>
 <div class="comment-input-row">
 <input class="comment-input" placeholder="응원 댓글 달기..." id="ci-${p.id}" onkeydown="if(event.key==='Enter')addCmt('${p.id}')">
 <button class="btn-comment" onclick="addCmt('${p.id}')">전송</button>
@@ -1076,9 +1089,29 @@ const idx=reactions[emoji].indexOf(user);
 if(idx===-1)reactions[emoji].push(user);else reactions[emoji].splice(idx,1);
 await updateDoc(doc(db,'posts',postId),{reactions});
 };
+window.expandCmts=function(postId,encodedHtml){
+const prev=document.getElementById('prev-'+postId);
+if(prev) prev.style.display='none';
+const cmt=document.getElementById('cmt-'+postId);
+if(cmt) cmt.classList.remove('hidden');
+const ci=document.getElementById('ci-'+postId);
+if(ci) ci.focus();
+};
 window.toggleCmt=function(id){
-const el=document.getElementById(id);el.classList.toggle('hidden');
-if(!el.classList.contains('hidden')){const ci=document.getElementById('ci-'+id.replace('cmt-',''));if(ci)ci.focus();}
+const postId=id.replace('cmt-','');
+const prev=document.getElementById('prev-'+postId);
+const el=document.getElementById(id);
+const isHidden=el.classList.contains('hidden');
+if(isHidden){
+// 열기: preview 숨기고 전체 댓글창 표시
+if(prev) prev.style.display='none';
+el.classList.remove('hidden');
+const ci=document.getElementById('ci-'+postId);if(ci)ci.focus();
+}else{
+// 닫기: 전체 댓글창 숨기고 preview 다시 표시
+el.classList.add('hidden');
+if(prev) prev.style.display='';
+}
 };
 window.addCmt=async function(postId){
 const input=document.getElementById('ci-'+postId),text=input.value.trim();if(!text)return;
