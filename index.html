@@ -763,14 +763,29 @@ document.getElementById('app').style.display='flex';
 document.getElementById('user-badge').textContent=user;
 if(isAdmin)document.getElementById('admin-tab').classList.remove('hidden');
 updateProg();
-setTimeout(()=>startListen(), 100);
+// Firebase 모듈 로드 완료 보장을 위해 requestAnimationFrame + 약간의 여유 부여
+function tryListen(attempt){
+try{
+startListen();
+}catch(e){
+if(attempt<5) setTimeout(()=>tryListen(attempt+1), 500);
+else{
+document.getElementById('feed-list').innerHTML=
+'<div class="empty-state"><div class="emoji">⚠️</div><p>연결에 실패했어요.<br>페이지를 새로고침 해주세요.</p></div>';
+}
+}
+}
+setTimeout(()=>tryListen(1), 300);
 }
 })();
 
+let _retryTimer=null;
 function startListen(){
+if(unsubscribe){unsubscribe();unsubscribe=null;}
 const q=query(collection(db,'posts'),orderBy('time','desc'));
 unsubscribe=onSnapshot(q,
 snap=>{
+if(_retryTimer){clearTimeout(_retryTimer);_retryTimer=null;}
 allPosts=snap.docs.map(d=>({id:d.id,...d.data()}));
 const activeTab=document.querySelector('.tab.active');
 const nm=activeTab?.getAttribute('onclick')?.match(/'(\w+)'/)?.[1]||'feed';
@@ -781,8 +796,14 @@ if(nm==='admin')renderAdmin();
 },
 err=>{
 console.error('Firebase 오류:', err);
-document.getElementById('feed-list').innerHTML=
-'<div class="empty-state"><div class="emoji">⚠️</div><p>데이터를 불러오지 못했어요.<br>잠시 후 다시 시도해주세요.</p></div>';
+const fl=document.getElementById('feed-list');
+if(fl) fl.innerHTML=
+'<div class="empty-state"><div class="emoji">⚠️</div><p>데이터를 불러오지 못했어요.<br>잠시 후 자동으로 재연결합니다...</p></div>';
+// 5초 후 자동 재연결 시도
+if(!_retryTimer) _retryTimer=setTimeout(()=>{
+_retryTimer=null;
+if(user) startListen();
+},5000);
 }
 );
 startGrantListen();
@@ -923,7 +944,7 @@ if(curMission==='mundam'&&!isMundamActive()){toast('문답 시간이 아니에�
 const text=document.getElementById('post-text').value.trim();
 if(curMission==='mundam'&&!text){toast('문답 내용을 입력해주세요!');return;}
 const mine=allPosts.filter(p=>p.author===user);
-if(curMission==='daily'&&mine.filter(p=>p.m==='daily').length>=DAILY_MAX){toast('데일리 미션은 최대 33회!');return;}
+// 데일리 업로드는 무제한 (점수는 calcEarnedPts에서 날짜별 1회만 인정)
 
 // ★★★ 깐부: 월~일 주차 기준으로 변경 ★★★
 if(curMission==='kanbu'){
@@ -1337,16 +1358,24 @@ return `<tr><td>${i+1}</td><td>${esc(p.author)}</td><td><span class="post-type-b
 
 let allGrants=[];
 let grantsUnsub=null;
+let _grantsRetryTimer=null;
 function startGrantListen(){
-if(grantsUnsub)return;
+if(grantsUnsub){grantsUnsub();grantsUnsub=null;}
 const q2=query(collection(db,'grants'),orderBy('time','desc'));
 grantsUnsub=onSnapshot(q2,snap=>{
+if(_grantsRetryTimer){clearTimeout(_grantsRetryTimer);_grantsRetryTimer=null;}
 allGrants=snap.docs.map(d=>({id:d.id,...d.data()}));
 const activeTab=document.querySelector('.tab.active');
 const nm=activeTab?.getAttribute('onclick')?.match(/'(\w+)'/)?.[1]||'feed';
 if(nm==='admin')renderAdmin();
 if(nm==='mypage')renderMypage();
-},err=>console.error('grants 오류:',err));
+},err=>{
+console.error('grants 오류:',err);
+if(!_grantsRetryTimer) _grantsRetryTimer=setTimeout(()=>{
+_grantsRetryTimer=null;
+if(user) startGrantListen();
+},5000);
+});
 }
 
 window.grantPoints=async function(){
