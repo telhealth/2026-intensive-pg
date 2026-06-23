@@ -1480,7 +1480,9 @@ document.getElementById('notice-modal').classList.add('show');
 }
 
 window.dlExcel=function(){
-let csv='\uFEFF순번,이름,사번,미션유형,내용,사진,일시,포인트,점수인정\n';
+// ── 시트1: 포스트별 인증 내역 ──
+let csv='\uFEFF[인증 내역]\n';
+csv+='순번,이름,사번,미션유형,내용,사진,일시,포인트,점수인정\n';
 const scoredIdsCsv=getScoredPostIds();
 allPosts.forEach((p,i)=>{
 const mi=MI[p.m]||MI.cheer;
@@ -1491,6 +1493,23 @@ const isScored=scoredIdsCsv.has(p.id);
 const actualPts=isScored?(p.pts||0):0;
 csv+=`${i+1},"${p.author}","${empno}","${mi.text}","${(p.text||'').replace(/"/g,'""')}","${p.photo?'있음':'없음'}","${ds}",${actualPts},"${isScored?'인정':'중복'}"\n`;
 });
+
+// ── 시트2: 사람별 헬시포인트 요약 (사용자 화면과 동일한 계산) ──
+csv+='\n\n[헬시포인트 요약 - 사용자 화면 기준]\n';
+csv+='이름,사번,데일리점수,데일리인정일수,깐부점수,깐부인정주수,문답점수,문답인정주수,보너스점수,보너스사유,총헬시포인트,70점달성여부\n';
+
+const names=[...new Set(Object.keys(MEMBERS))]; // 전체 참가자 기준
+names.forEach(name=>{
+const mine=allPosts.filter(p=>p.author===name);
+const {dailyPts,kanbuPts,mundamPts,dailyDays,kanbuWeeks,mundamWeeks}=calcEarnedPts(mine);
+const myGrants=(allGrants||[]).filter(g=>g.target===name);
+const bonusPts=myGrants.reduce((s,g)=>s+(g.pts||0),0);
+const bonusMemos=myGrants.map(g=>`${g.memo}(+${g.pts})`).join('/');
+const totalPts=dailyPts+kanbuPts+mundamPts+bonusPts;
+const empno=MEMBERS[name]||'-';
+csv+=`"${name}","${empno}",${dailyPts},${dailyDays},${kanbuPts},${kanbuWeeks},${mundamPts},${mundamWeeks},${bonusPts},"${bonusMemos}",${totalPts},"${totalPts>=70?'✅달성':'❌미달}"\n`;
+});
+
 const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
 const url=URL.createObjectURL(blob);
 const a=document.createElement('a');a.href=url;a.download=`챌린지_${new Date().toISOString().slice(0,10)}.csv`;a.click();
