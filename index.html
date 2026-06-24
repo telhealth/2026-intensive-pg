@@ -1507,7 +1507,8 @@ const bonusPts=myGrants.reduce((s,g)=>s+(g.pts||0),0);
 const bonusMemos=myGrants.map(g=>`${g.memo}(+${g.pts})`).join('/');
 const totalPts=dailyPts+kanbuPts+mundamPts+bonusPts;
 const empno=MEMBERS[name]||'-';
-csv+=`"${name}","${empno}",${dailyPts},${dailyDays},${kanbuPts},${kanbuWeeks},${mundamPts},${mundamWeeks},${bonusPts},"${bonusMemos}",${totalPts},"${totalPts>=70?'✅달성':'❌미달}"\n`;
+const achieved=totalPts>=70?'✅달성':'❌미달';
+csv+=`"${name}","${empno}",${dailyPts},${dailyDays},${kanbuPts},${kanbuWeeks},${mundamPts},${mundamWeeks},${bonusPts},"${bonusMemos}",${totalPts},"${achieved}"\n`;
 });
 
 const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
