@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>2026 인텐시브 케어 프로그램</title>
-<link href="https://jpn01.safelinks.protection.outlook.com/?url=https%3A%2F%2Ffonts.googleapis.com%2Fcss2%3Ffamily%3DNoto%2BSans%2BKR%3Awght%40300%3B400%3B500%3B700%3B900%26display%3Dswap&data=05%7C02%7Cmijung.kim%40tel.com%7C241d5762d6bf48b0457708ded72986f1%7C8c433003a0814dfba631100526250b1a%7C1%7C0%7C639184770572063611%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=jLevUl%2FskoHpCnFuFYlEVoawJS8uqA4KBr5RdBp1PCU%3D&reserved=0" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
 --bg:#f0faf5;--surface:#ffffff;--surface2:#e8f5ee;
@@ -604,8 +604,8 @@ radial-gradient(ellipse at 75% 70%,#0d7a5218 0%,transparent 50%),var(–bg);}
 <div class="toast" id="toast"></div>
 
 <script type="module">
-import { initializeApp } from "https://jpn01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.gstatic.com%2Ffirebasejs%2F10.12.0%2Ffirebase-app.js&data=05%7C02%7Cmijung.kim%40tel.com%7C241d5762d6bf48b0457708ded72986f1%7C8c433003a0814dfba631100526250b1a%7C1%7C0%7C639184770572102096%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=TlhIBzWvbNSQ4h4HUF8jd3nmC8roCk2hTIO6Fw4zkkA%3D&reserved=0";
-import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://jpn01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.gstatic.com%2Ffirebasejs%2F10.12.0%2Ffirebase-firestore.js&data=05%7C02%7Cmijung.kim%40tel.com%7C241d5762d6bf48b0457708ded72986f1%7C8c433003a0814dfba631100526250b1a%7C1%7C0%7C639184770572121162%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=uemTpfojMVazMiZGJFTSoRd3obJ1uzHozCnYcX2S%2FkU%3D&reserved=0";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyAybs8l52BCXjB34hRTYHN6lqsNWmZBPUI",
@@ -1060,7 +1060,7 @@ ${p.author===user?`<button class="btn-delete-post" onclick="deletePost('${p.id}'
 </div>
 ${allCmts.length>0?`
 <div class="comments-preview" id="prev-${p.id}">
-${hasMore?`<button class="more-cmts-btn" onclick="expandCmts('${p.id}')">댓글 ${allCmts.length-3}개 더 보기</button>`:''}
+${hasMore?`<button class="more-cmts-btn" onclick="expandCmts('${p.id}',\`${encodeURIComponent(allHtml)}\`)">댓글 ${allCmts.length-3}개 더 보기</button>`:''}
 <div>${previewHtml}</div>
 </div>`:''}
 <div class="comments hidden" id="cmt-${p.id}">
@@ -1089,9 +1089,7 @@ const idx=reactions[emoji].indexOf(user);
 if(idx===-1)reactions[emoji].push(user);else reactions[emoji].splice(idx,1);
 await updateDoc(doc(db,'posts',postId),{reactions});
 };
-window.expandCmts=function(postId){
-const post=allPosts.find(p=>p.id===postId);
-if(!post)return;
+window.expandCmts=function(postId,encodedHtml){
 const prev=document.getElementById('prev-'+postId);
 if(prev) prev.style.display='none';
 const cmt=document.getElementById('cmt-'+postId);
@@ -1455,7 +1453,7 @@ toast('공지 등록 완료! 📢');
 window.deleteNotice=async function(){
 if(!confirm('현재 공지를 삭제할까요?'))return;
 try{
-const {getDocs,deleteDoc}=await import('https://jpn01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.gstatic.com%2Ffirebasejs%2F10.12.0%2Ffirebase-firestore.js&data=05%7C02%7Cmijung.kim%40tel.com%7C241d5762d6bf48b0457708ded72986f1%7C8c433003a0814dfba631100526250b1a%7C1%7C0%7C639184770572136691%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=4kNzDgrWJLIONpU7jOzuiCbAAdRjvTCikEqVHT9IuGg%3D&reserved=0');
+const {getDocs,deleteDoc}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
 const q2=query(collection(db,'notices'),orderBy('time','desc'));
 const snap=await getDocs(q2);
 if(!snap.empty){
@@ -1467,7 +1465,7 @@ toast('공지 삭제 완료!');
 
 async function checkNotice(){
 try{
-const {getDocs}=await import('https://jpn01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fwww.gstatic.com%2Ffirebasejs%2F10.12.0%2Ffirebase-firestore.js&data=05%7C02%7Cmijung.kim%40tel.com%7C241d5762d6bf48b0457708ded72986f1%7C8c433003a0814dfba631100526250b1a%7C1%7C0%7C639184770572154922%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=AUw5g9FuPJwtx2rqF28VMil%2F5cqD6rgklzXFsm56paA%3D&reserved=0');
+const {getDocs}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
 const q2=query(collection(db,'notices'),orderBy('time','desc'));
 const snap=await getDocs(q2);
 if(snap.empty)return;
@@ -1496,10 +1494,11 @@ const actualPts=isScored?(p.pts||0):0;
 csv+=`${i+1},"${p.author}","${empno}","${mi.text}","${(p.text||'').replace(/"/g,'""')}","${p.photo?'있음':'없음'}","${ds}",${actualPts},"${isScored?'인정':'중복'}"\n`;
 });
 
-// ── 시트2: 사람별 헬시포인트 요약 ──
+// ── 시트2: 사람별 헬시포인트 요약 (사용자 화면과 동일한 계산) ──
 csv+='\n\n[헬시포인트 요약 - 사용자 화면 기준]\n';
 csv+='이름,사번,데일리점수,데일리인정일수,깐부점수,깐부인정주수,문답점수,문답인정주수,보너스점수,보너스사유,총헬시포인트,70점달성여부\n';
-const names=[...new Set(Object.keys(MEMBERS))];
+
+const names=[...new Set(Object.keys(MEMBERS))]; // 전체 참가자 기준
 names.forEach(name=>{
 const mine=allPosts.filter(p=>p.author===name);
 const {dailyPts,kanbuPts,mundamPts,dailyDays,kanbuWeeks,mundamWeeks}=calcEarnedPts(mine);
@@ -1510,45 +1509,6 @@ const totalPts=dailyPts+kanbuPts+mundamPts+bonusPts;
 const empno=MEMBERS[name]||'-';
 const achieved=totalPts>=70?'✅달성':'❌미달';
 csv+=`"${name}","${empno}",${dailyPts},${dailyDays},${kanbuPts},${kanbuWeeks},${mundamPts},${mundamWeeks},${bonusPts},"${bonusMemos}",${totalPts},"${achieved}"\n`;
-});
-
-// ── 시트3: 사람별 인터랙션 통계 ──
-csv+='\n\n[인터랙션 통계 - 활발한 사람 찾기]\n';
-csv+='이름,사번,내가누른이모지총합,👍🏻,🫶🏻,💪🏻,🩷,😢,내가쓴댓글수,내포스트에받은이모지수,내포스트에받은댓글수,총활동점수(누른+댓글)\n';
-
-// 사람별 인터랙션 집계
-const EMOJI_LIST=['👍🏻','🫶🏻','💪🏻','🩷','😢'];
-names.forEach(name=>{
-// 내가 누른 이모지 (다른 사람 포스트 포함 전체)
-const emojiCounts={};
-let totalGiven=0;
-EMOJI_LIST.forEach(e=>{
-const cnt=allPosts.filter(p=>p.author!==name).reduce((s,p)=>{
-const reactors=(p.reactions||{})[e]||[];
-return s+(reactors.includes(name)?1:0);
-},0);
-emojiCounts[e]=cnt;
-totalGiven+=cnt;
-});
-
-// 내가 쓴 댓글 수 (다른 사람 포스트에)
-const myComments=allPosts.filter(p=>p.author!==name).reduce((s,p)=>{
-return s+(p.comments||[]).filter(c=>c.author===name).length;
-},0);
-
-// 내 포스트가 받은 이모지 수
-const receivedEmoji=allPosts.filter(p=>p.author===name).reduce((s,p)=>{
-return s+Object.values(p.reactions||{}).reduce((a,v)=>a+(v.length||0),0);
-},0);
-
-// 내 포스트가 받은 댓글 수
-const receivedCmts=allPosts.filter(p=>p.author===name).reduce((s,p)=>{
-return s+(p.comments||[]).length;
-},0);
-
-const totalActivity=totalGiven+myComments; // 내가 남긴 반응 총합
-const empno=MEMBERS[name]||'-';
-csv+=`"${name}","${empno}",${totalGiven},${EMOJI_LIST.map(e=>emojiCounts[e]).join(',')},${myComments},${receivedEmoji},${receivedCmts},${totalActivity}\n`;
 });
 
 const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
